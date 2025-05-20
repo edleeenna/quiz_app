@@ -58,7 +58,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     };
     
     // Call the backend API
-    const response = await fetch('http://localhost:8000/generate-quiz', {
+    const response = await fetch('https://quiz-app-zoxs.onrender.com/generate-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
