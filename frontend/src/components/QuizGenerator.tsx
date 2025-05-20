@@ -31,67 +31,72 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   const [progress, setProgress] = useState(0);
   const [isExamplesOpen, setIsExamplesOpen] = useState(false);
   
-  const generateQuiz = () => {
-    if (!selectedNote) {
-      toast.error("Please select a note first");
-      return;
+ const generateQuiz = async () => {
+  if (!selectedNote) {
+    toast.error("Please select a note first");
+    return;
+  }
+  
+  setLoading(true);
+  setProgress(10);
+  
+  // Progress animation
+  const progressInterval = setInterval(() => {
+    setProgress((prev) => {
+      const newProgress = prev + Math.floor(Math.random() * 15);
+      return newProgress >= 90 ? 90 : newProgress;
+    });
+  }, 600);
+
+  try {
+    // Format the data for the API
+    const noteData = {
+      id: selectedNote.id,
+      name: selectedNote.name,
+      content: selectedNote.content,
+      example_questions: selectedNote.exampleQuestions?.split('\n') || null
+    };
+    
+    // Call the backend API
+    const response = await fetch('http://localhost:8000/generate-quiz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(noteData),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
     }
     
-    setLoading(true);
-    setProgress(10);
+    const data = await response.json();
     
-    // Simulate AI processing with progress updates
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + Math.floor(Math.random() * 15);
-        return newProgress >= 90 ? 90 : newProgress;
-      });
-    }, 600);
-
-    // Mock generating quiz from content (in a real app this would call an AI service)
-    // Note: Here is where you would send both the note content and example questions to the AI
+    // Map the API response to your frontend format
+    const questions = data.questions.map((q, index) => ({
+      id: `q-${index}`,
+      question: q.question,
+      options: q.options,
+      correctAnswer: q.correct_answer
+    }));
+    
+    clearInterval(progressInterval);
+    setProgress(100);
+    
     setTimeout(() => {
-      clearInterval(progressInterval);
-      setProgress(100);
-      
-      console.log("Sending to AI:", {
-        noteContent: selectedNote.content,
-        exampleQuestions: selectedNote.exampleQuestions || "No examples provided",
-      });
-      
-      // Generate some mock questions based on note content
-      // In a real implementation, the AI would use the example questions as a guide
-      const words = selectedNote.content
-        .split(/\s+/)
-        .filter(word => word.length > 4)
-        .slice(0, 20);
-      
-      // This should be replaced with actual AI-generated questions based on the note content and examples
-      const mockQuestions: QuizQuestion[] = Array(5).fill(null).map((_, index) => {
-        const randomWordIndex = Math.floor(Math.random() * words.length);
-        const word = words[randomWordIndex] || "concept";
-        
-        return {
-          id: `q-${index}`,
-          question: `What is the meaning of "${word}" in this context?`,
-          options: [
-            `Definition A for ${word}`,
-            `Definition B for ${word}`,
-            `Definition C for ${word}`,
-            `Definition D for ${word}`
-          ],
-          correctAnswer: `Definition A for ${word}` // First option is correct in mock quiz
-        };
-      });
-      
-      setTimeout(() => {
-        setLoading(false);
-        onQuizGenerated(mockQuestions);
-        toast.success("Quiz generated successfully!");
-      }, 500);
-      
-    }, 3000);
-  };
+      setLoading(false);
+      onQuizGenerated(questions);
+      toast.success("Quiz generated successfully!");
+    }, 500);
+    
+  } catch (error) {
+    clearInterval(progressInterval);
+    setLoading(false);
+    console.error("Error generating quiz:", error);
+    toast.error("Failed to generate quiz. Please try again.");
+  }
+};
+
 
   if (!selectedNote) {
     return (
