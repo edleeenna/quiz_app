@@ -3,8 +3,8 @@
 A full-stack application that generates quizzes from your notes using AI.
 
 ## Deployment Information
-
-https://quiz-app-rho-brown.vercel.app/
+- Frontend deployed to vercel: https://quiz-app-rho-brown.vercel.app/
+- Backend deployed on Render.com (a free instance, so it will go to sleep with inactivity. Please note that this means AI generation will be slow as the backend reboots :smile: )
 
 ## Features
 - Upload text files or PDFs to extract content
