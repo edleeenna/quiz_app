@@ -2,6 +2,10 @@
 
 A full-stack application that generates quizzes from your notes using AI.
 
+## Deployment Information
+
+https://quiz-app-rho-brown.vercel.app/
+
 ## Features
 - Upload text files or PDFs to extract content
 - Manually enter notes and study materials
@@ -13,8 +17,7 @@ A full-stack application that generates quizzes from your notes using AI.
 
 - Frontend: React, Typescript
 - Backend: FastAPI (Python)
-- AI Integration: Groq API for quiz generation
-- PDF processing
+- AI Integration: Groq API for quiz generation (NOT to be confused with Grok :wink: , yuck )
 
 ## Getting Started
 ### Prerequisites
