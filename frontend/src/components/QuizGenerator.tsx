@@ -31,72 +31,53 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   const [progress, setProgress] = useState(0);
   const [isExamplesOpen, setIsExamplesOpen] = useState(false);
   
- const generateQuiz = async () => {
-  if (!selectedNote) {
-    toast.error("Please select a note first");
-    return;
-  }
-  
-  setLoading(true);
-  setProgress(10);
-  
-  // Progress animation
-  const progressInterval = setInterval(() => {
-    setProgress((prev) => {
-      const newProgress = prev + Math.floor(Math.random() * 15);
-      return newProgress >= 90 ? 90 : newProgress;
-    });
-  }, 600);
-
-  try {
-    // Format the data for the API
-    const noteData = {
-      id: selectedNote.id,
-      name: selectedNote.name,
-      content: selectedNote.content,
-      example_questions: selectedNote.exampleQuestions?.split('\n') || null
-    };
-    
-    // Call the backend API
-    const response = await fetch('https://quiz-app-zoxs.onrender.com/generate-quiz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(noteData),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+  const generateQuiz = async () => {
+    if (!selectedNote) {
+      toast.error("Please select a note first");
+      return;
     }
-    
-    const data = await response.json();
-    
-    // Map the API response to your frontend format
-    const questions = data.questions.map((q, index) => ({
-      id: `q-${index}`,
-      question: q.question,
-      options: q.options,
-      correctAnswer: q.correct_answer
-    }));
-    
-    clearInterval(progressInterval);
-    setProgress(100);
-    
-    setTimeout(() => {
+  
+    setLoading(true);
+    setProgress(10);
+  
+    const formData = new FormData();
+    formData.append("id", selectedNote.id);
+    formData.append("name", selectedNote.name);
+    formData.append("content", selectedNote.content);
+    if (selectedNote.exampleQuestions) {
+      formData.append("example_questions", selectedNote.exampleQuestions);
+    }
+  
+    try {
+      const response = await fetch('https://quiz-app-zoxs.onrender.com/generate-quiz', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const questions = data.questions.map((q, index) => ({
+        id: `q-${index}`,
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.correct_answer,
+      }));
+  
+      setProgress(100);
+      setTimeout(() => {
+        setLoading(false);
+        onQuizGenerated(questions);
+        toast.success("Quiz generated successfully!");
+      }, 500);
+    } catch (error) {
       setLoading(false);
-      onQuizGenerated(questions);
-      toast.success("Quiz generated successfully!");
-    }, 500);
-    
-  } catch (error) {
-    clearInterval(progressInterval);
-    setLoading(false);
-    console.error("Error generating quiz:", error);
-    toast.error("Failed to generate quiz. Please try again.");
-  }
-};
-
+      console.error("Error generating quiz:", error);
+      toast.error("Failed to generate quiz. Please try again.");
+    }
+  };
 
   if (!selectedNote) {
     return (

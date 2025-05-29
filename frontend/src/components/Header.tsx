@@ -16,7 +16,7 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
           <div className="bg-gradient-to-r from-primary to-secondary rounded-lg p-2">
             <BookOpen className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-xl font-bold">QuizGenius</h1>
+          <h1 className="text-xl font-bold">QuizNotes</h1>
         </div>
         
         <div className="flex space-x-2">
