@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import NotesFile, QuizResponse, QuizQuestion, NotesFileResponse
@@ -15,13 +16,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.post("/generate-quiz", response_model=QuizResponse)
-async def generate_quiz_endpoint(notes_file: NotesFile):
+async def generate_quiz_endpoint(
+    id: str = Form(...),
+    name: str = Form(...),
+    content: str = Form(...),
+    example_questions: Optional[str] = Form(None)
+):
     try:
-        questions = generate_quiz_from_notes(notes_file)
-        return QuizResponse(generated_from=notes_file.name, questions=questions)
+        notes_file_data = NotesFile(
+            id=id,
+            name=name,
+            content=content,
+            example_questions=example_questions
+        )
+        questions = generate_quiz_from_notes(notes_file_data)
+        return QuizResponse(generated_from=name, questions=questions)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 # If in future you want to add file upload functionality, save to db and then generate quiz
 #@app.post("/upload-notes", response_model=NotesFileResponse)

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import mammoth from 'mammoth';
 
 interface NoteFile {
   id: string;
@@ -61,7 +62,17 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
 
   const processFile = async (file: File) => {
     try {
-      const content = await file.text();
+      let content = '';
+      const ext = file.name.split('.').pop()?.toLowerCase();
+  
+      if (ext === 'docx') {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        content = result.value;
+      } else {
+        content = await file.text();
+      }
+  
       setUploadedFile(file);
       setUploadedContent(content);
       setActiveTab('examples'); // Switch to examples tab after upload
@@ -71,6 +82,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       console.error("Error reading file:", error);
     }
   };
+  
 
   const handleUploadedNoteSubmit = () => {
     if (!uploadedFile || !uploadedContent) {

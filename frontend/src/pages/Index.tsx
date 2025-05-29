@@ -90,7 +90,7 @@ const Index = () => {
       
       <footer className="py-4 text-center text-sm text-muted-foreground border-t">
         <div className="container">
-          QuizGenius © {new Date().getFullYear()} - Turn your notes into quizzes
+          QuizNotes © {new Date().getFullYear()} - Turn your notes into quizzes
         </div>
       </footer>
     </div>
