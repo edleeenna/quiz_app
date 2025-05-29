@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { FileText, BookOpen } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { FileText, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
   activeTab: "notes" | "quiz";
@@ -13,12 +12,16 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
     <header className="w-full py-4 border-b border-border bg-card">
       <div className="container flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="bg-gradient-to-r from-primary to-secondary rounded-lg p-2">
+          <button
+            onClick={() => setActiveTab("notes")}
+            className="bg-gradient-to-r from-primary to-secondary rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            aria-label="Go to Notes"
+          >
             <BookOpen className="h-6 w-6 text-white" />
-          </div>
+          </button>
           <h1 className="text-xl font-bold">QuizNotes</h1>
         </div>
-        
+
         <div className="flex space-x-2">
           <Button
             variant={activeTab === "notes" ? "default" : "outline"}
