@@ -5,7 +5,7 @@ class NotesFile(BaseModel):
     id: str
     name: str
     content: str
-    example_questions: Optional[List[str]] = None
+    example_questions: str | None = None
 
 class NotesFileResponse(BaseModel):
     content: str
