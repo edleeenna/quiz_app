@@ -40,6 +40,15 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     setLoading(true);
     setProgress(10);
   
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 90) {
+          return prev + Math.floor(Math.random() * 10) + 1; // increase 1-10%
+        }
+        return prev;
+      });
+    }, 500); // every 500ms
+  
     const formData = new FormData();
     formData.append("id", selectedNote.id);
     formData.append("name", selectedNote.name);
@@ -66,6 +75,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         correctAnswer: q.correct_answer,
       }));
   
+      clearInterval(interval);
       setProgress(100);
       setTimeout(() => {
         setLoading(false);
@@ -73,12 +83,13 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         toast.success("Quiz generated successfully!");
       }, 500);
     } catch (error) {
+      clearInterval(interval);
       setLoading(false);
       console.error("Error generating quiz:", error);
       toast.error("Failed to generate quiz. Please try again.");
     }
   };
-
+  
   if (!selectedNote) {
     return (
       <Card className="border border-dashed border-border bg-muted/30 animate-fade-in">
