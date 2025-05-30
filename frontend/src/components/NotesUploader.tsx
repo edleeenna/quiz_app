@@ -189,7 +189,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
           ) : (
             <>
               <CardTitle>Create Note</CardTitle>
-              <CardDescription>Enter your notes manually</CardDescription>
+              <CardDescription>Enter your notes manually and optionally include example questions</CardDescription>
             </>
           )}
         </CardHeader>
@@ -210,14 +210,16 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                 </label>
                 <Textarea
                   id="uploaded-example-questions"
-                  placeholder="Enter example questions to guide the AI in quiz generation (one question per line)..."
+                  placeholder={`Enter example questions to guide the AI in quiz generation. Try to match format below or AI might not return a good result...\n e.g.\nQ: What is the capital of France?\na) Berlin\nb) Madrid\nc) Paris (correct)\nd) Rome`}
                   className="min-h-[200px]"
                   value={uploadedExampleQuestions}
                   onChange={(e) => setUploadedExampleQuestions(e.target.value)}
                 />
+
                 <p className="text-xs text-muted-foreground mt-1">
                   Format: Write one question per line, followed by options (a, b, c, d) and indicate the correct answer.
-                </p>
+                  </p>
+                
               </div>
             </div>
           ) : (
@@ -258,7 +260,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   </label>
                   <Textarea
                     id="example-questions"
-                    placeholder="Enter example questions to guide the AI in quiz generation (one question per line)..."
+                    placeholder={`Enter example questions to guide the AI in quiz generation. Try to match format below or AI might not return a good result...\n \nQ: What is the capital of France?\na) Berlin\nb) Madrid\nc) Paris (correct)\nd) Rome`}
                     className="min-h-[200px]"
                     value={exampleQuestions}
                     onChange={(e) => setExampleQuestions(e.target.value)}
