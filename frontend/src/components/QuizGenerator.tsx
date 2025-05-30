@@ -37,6 +37,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
       return;
     }
   
+    toast.warning("Warming up the server... This might take a few seconds.");
     setLoading(true);
     setProgress(10);
   
