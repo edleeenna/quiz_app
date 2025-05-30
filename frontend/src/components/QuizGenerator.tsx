@@ -67,8 +67,21 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
+    
   
       const data = await response.json();
+      if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
+        toast.error("No questions were generated.", {
+          action: {
+            label: "Retry",
+            onClick: generateQuiz
+          }
+        });
+        
+        throw new Error("No quiz questions were returned. Please check your input and try again.");
+       
+
+      }
       const questions = data.questions.map((q, index) => ({
         id: `q-${index}`,
         question: q.question,
