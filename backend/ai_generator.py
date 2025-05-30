@@ -1,11 +1,11 @@
 from models import NotesFile, QuizQuestion
 from dotenv import load_dotenv
-load_dotenv()
 
 import os
 import re
 import requests
 
+load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
@@ -28,6 +28,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
         - All options should be plausible, but only one should be correct.
         - Do NOT include questions where the correct answer is not present in the options.
         - Ensure clarity, accuracy, and relevance to the notes.
+        - Use the example questions to guide style and format. 
 
         Output Format (repeat exactly 10 times):
         Q: [Your question here]
@@ -58,7 +59,6 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
  
     return parse_questions(content)
 
-import re
 
 def parse_questions(text: str) -> list[QuizQuestion]:
     print("Parsing questions...")
