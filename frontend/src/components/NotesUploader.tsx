@@ -147,7 +147,10 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
             <FileText className="h-10 w-10 text-muted-foreground mb-4" />
             <p className="text-lg font-medium mb-2">Drag & drop your notes</p>
             <p className="text-sm text-muted-foreground mb-4">
-              Upload text files (TXT, MD, DOC)
+              Upload text files (TXT, MD, DOC). 
+            </p>
+            <p className="text-sm text-muted-foreground mb-4">
+              Large files may not be able to be processed by AI.
             </p>
             <Button variant="outline" className="relative">
               <input
