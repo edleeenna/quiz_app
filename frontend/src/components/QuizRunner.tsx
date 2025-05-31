@@ -248,7 +248,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         
         <div className="flex space-x-2">
           {selectedAnswer && !showExplanation && (
-            <Button variant="outline" onClick={handleShowExplanation}>
+            <Button variant="outline\" onClick={handleShowExplanation}>
               Check Answer
             </Button>
           )}
