@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BookOpen, Loader, ArrowRight, CheckCircle, FileInput } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,11 +43,11 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev < 90) {
-          return prev + Math.floor(Math.random() * 10) + 1; // increase 1-10%
+          return prev + Math.floor(Math.random() * 10) + 1;
         }
         return prev;
       });
-    }, 500); // every 500ms
+    }, 500);
   
     const formData = new FormData();
     formData.append("id", selectedNote.id);
@@ -68,7 +67,6 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         throw new Error(`API error: ${response.status}`);
       }
     
-  
       const data = await response.json();
       if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
         toast.error("No questions were generated.", {
@@ -77,11 +75,9 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
             onClick: generateQuiz
           }
         });
-        
         throw new Error("No quiz questions were returned. Please check your input and try again.");
-       
-
       }
+
       const questions = data.questions.map((q, index) => ({
         id: `q-${index}`,
         question: q.question,
@@ -106,7 +102,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   
   if (!selectedNote) {
     return (
-      <Card className="border border-dashed border-border bg-muted/30 animate-fade-in">
+      <Card className="border border-dashed border-border/50 bg-card/50 backdrop-blur-sm">
         <CardContent className="p-6 flex flex-col items-center justify-center min-h-[300px] text-center">
           <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">No note selected</h3>
@@ -122,16 +118,18 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   }
 
   return (
-    <Card className="animate-fade-in">
+    <Card className="animate-fade-in bg-card/50 backdrop-blur-sm border-border/50">
       <CardHeader>
-        <CardTitle>Generate Quiz</CardTitle>
+        <CardTitle className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Generate Quiz
+        </CardTitle>
         <CardDescription>
           Create a multiple-choice quiz from your note
           {selectedNote.exampleQuestions ? " (includes example questions)" : ""}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg">
+        <div className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg border border-border/50">
           <BookOpen className="h-8 w-8 text-primary flex-shrink-0" />
           <div className="flex-1 overflow-hidden">
             <h3 className="font-medium truncate">{selectedNote.name}</h3>
@@ -147,10 +145,10 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
           <Collapsible 
             open={isExamplesOpen} 
             onOpenChange={setIsExamplesOpen}
-            className="border rounded-lg p-2"
+            className="border rounded-lg p-2 bg-muted/20"
           >
             <CollapsibleTrigger asChild>
-              <div className="flex items-center justify-between cursor-pointer p-2 hover:bg-muted/30 rounded">
+              <div className="flex items-center justify-between cursor-pointer p-2 hover:bg-muted/30 rounded transition-colors">
                 <div className="flex items-center">
                   <FileInput className="h-5 w-5 mr-2 text-primary" />
                   <span className="text-sm font-medium">Example Questions</span>
@@ -193,7 +191,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         <Button 
           onClick={generateQuiz} 
           disabled={loading}
-          className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+          className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300"
         >
           {loading ? (
             <Loader className="h-4 w-4 mr-2 animate-spin" />
