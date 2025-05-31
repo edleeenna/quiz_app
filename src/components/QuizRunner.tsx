@@ -126,57 +126,29 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
           <div className="space-y-4">
             <h3 className="font-medium">Question Summary</h3>
             {questions.map((q, idx) => (
-              <div key={q.id} className="flex items-start space-x-3 p-4 rounded-md bg-muted/30">
-                <div className="flex-shrink-0 mt-1">
+              <div key={q.id} className="flex items-center space-x-3 p-3 rounded-md bg-muted/30">
+                <div className="flex-shrink-0">
                   {userAnswers[q.id] === q.correctAnswer ? (
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
                     <X className="h-5 w-5 text-destructive" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium mb-1">Question {idx + 1}</p>
-                  <p className="text-sm text-muted-foreground break-words">{q.question}</p>
-                  <div className="mt-2 space-y-1 text-sm">
-                    <div className="flex items-start gap-2">
-                      <span className="text-muted-foreground whitespace-nowrap">Your answer:</span>
-                      <span className={`break-words flex-1 ${userAnswers[q.id] === q.correctAnswer ? "text-green-500" : "text-destructive"}`}>
-                        {userAnswers[q.id]}
-                      </span>
-                    </div>
-                    {userAnswers[q.id] !== q.correctAnswer && (
-                      <div className="flex items-start gap-2">
-                        <span className="text-muted-foreground whitespace-nowrap">Correct:</span>
-                        <span className="text-green-500 break-words flex-1">{q.correctAnswer}</span>
-                      </div>
-                    )}
-                  </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Question {idx + 1}</p>
+                  <p className="text-xs text-muted-foreground truncate">{q.question}</p>
                 </div>
               </div>
             ))}
           </div>
         </CardContent>
-        <CardFooter className="flex gap-2">
-          <Button 
-            variant="outline"
-            onClick={() => {
-              setQuizCompleted(false);
-              setCurrentQuestionIndex(0);
-              setSelectedAnswer(null);
-              setUserAnswers({});
-              setShowExplanation(false);
-            }} 
-            className="flex-1"
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Retry Quiz
-          </Button>
+        <CardFooter>
           <Button 
             onClick={restartQuiz} 
-            className="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+            className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Quizzes
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Take Another Quiz
           </Button>
         </CardFooter>
       </Card>
@@ -200,7 +172,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         />
       </CardHeader>
       <CardContent className="space-y-6">
-        <h2 className="text-xl font-medium break-words">{currentQuestion.question}</h2>
+        <h2 className="text-xl font-medium">{currentQuestion.question}</h2>
         
         <div className="space-y-3">
           {currentQuestion.options.map((option, idx) => (
@@ -213,7 +185,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
                   : 'border-border hover:border-primary/50 hover:bg-muted/50'
               }`}
             >
-              <div className="flex items-start space-x-3">
+              <div className="flex items-center space-x-3">
                 <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center border ${
                   selectedAnswer === option 
                     ? 'border-primary text-primary'
@@ -221,7 +193,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
                 }`}>
                   <span className="text-sm">{String.fromCharCode(65 + idx)}</span>
                 </div>
-                <span className="flex-1 break-words">{option}</span>
+                <span className="flex-1">{option}</span>
               </div>
             </button>
           ))}
@@ -230,7 +202,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         {showExplanation && (
           <div className="p-4 bg-muted/30 rounded-lg border border-border">
             <h3 className="font-medium mb-2">Explanation</h3>
-            <p className="text-muted-foreground break-words">
+            <p className="text-muted-foreground">
               {selectedAnswer === currentQuestion.correctAnswer 
                 ? "That's correct! Good job." 
                 : `The correct answer is "${currentQuestion.correctAnswer}".`}
@@ -250,7 +222,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         
         <div className="flex space-x-2">
           {selectedAnswer && !showExplanation && (
-            <Button variant="outline" onClick={handleShowExplanation}>
+            <Button variant="outline\" onClick={handleShowExplanation}>
               Check Answer
             </Button>
           )}

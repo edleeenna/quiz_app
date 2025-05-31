@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
-  activeTab?: "notes" | "quiz";
-  setActiveTab?: (tab: "notes" | "quiz") => void;
+  activeTab?: "notes" | "quiz" | "past-quizzes";
+  setActiveTab?: (tab: "notes" | "quiz" | "past-quizzes") => void;
 }
 
 const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
@@ -54,6 +54,17 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
               >
                 <BookOpen className="h-4 w-4" />
                 <span>Quiz</span>
+              </Button>
+              <Button
+                variant={activeTab === "past-quizzes" ? "default" : "outline"}
+                onClick={() => setActiveTab("past-quizzes")}
+                className={cn(
+                  "flex items-center space-x-2 transition-all hover:-translate-y-0.5",
+                  activeTab === "past-quizzes" && "bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                )}
+              >
+                <BookOpen className="h-4 w-4" />
+                <span>Past Quizzes</span>
               </Button>
             </div>
           )}

@@ -9,7 +9,7 @@ import { NoteFile, QuizQuestion } from '@/types';
 import { SavedQuiz, saveQuiz } from '@/lib/quiz-storage';
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState<"notes" | "quiz" | "past-quizzes">("notes");
+  const [activeTab, setActiveTab] = useState<"notes" | "quiz">("notes");
   const [notes, setNotes] = useState<NoteFile[]>([]);
   const [selectedNote, setSelectedNote] = useState<NoteFile | null>(null);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
@@ -53,7 +53,6 @@ const App = () => {
     setQuizQuestions([]);
     setSelectedNote(null);
     setSelectedQuiz(null);
-    setActiveTab("past-quizzes");
   };
 
   return (
@@ -79,15 +78,22 @@ const App = () => {
           )}
           
           {activeTab === "quiz" && (
-            <div className="max-w-2xl mx-auto animate-fade-in">
+            <div className="max-w-2xl mx-auto animate-fade-in space-y-8">
               <div className="relative">
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
                 <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
                 {!quizActive ? (
-                  <QuizGenerator 
-                    selectedNote={selectedNote}
-                    onQuizGenerated={handleQuizGenerated}
-                  />
+                  <>
+                    {!selectedNote && (
+                      <QuizList onSelectQuiz={handleSelectSavedQuiz} />
+                    )}
+                    {selectedNote && (
+                      <QuizGenerator 
+                        selectedNote={selectedNote}
+                        onQuizGenerated={handleQuizGenerated}
+                      />
+                    )}
+                  </>
                 ) : (
                   <QuizRunner 
                     questions={quizQuestions}
@@ -95,19 +101,6 @@ const App = () => {
                     quizId={selectedQuiz?.id}
                   />
                 )}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "past-quizzes" && (
-            <div className="max-w-6xl mx-auto animate-fade-in">
-              <div className="relative">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-                <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-                <QuizList 
-                  onSelectQuiz={handleSelectSavedQuiz} 
-                  setActiveTab={setActiveTab}
-                />
               </div>
             </div>
           )}
