@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BookOpen, Home } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -31,15 +31,6 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
         </div>
 
         <div className="flex items-center space-x-4">
-          {!isHome && (
-            <Link to="/">
-              <Button variant="ghost\" className="flex items-center space-x-2">
-                <Home className="h-4 w-4" />
-                <span>Home</span>
-              </Button>
-            </Link>
-          )}
-          
           {isApp && setActiveTab && (
             <div className="flex space-x-2">
               <Button
