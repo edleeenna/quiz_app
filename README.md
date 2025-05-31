@@ -21,7 +21,13 @@ A full-stack application that generates quizzes from your notes using AI.
 
 - Frontend: React, Typescript
 - Backend: FastAPI (Python)
-- AI Integration: Groq API for quiz generation (NOT to be confused with Grok :wink: , yuck )
+- AI Integration: Groq API for quiz generation (NOT to be confused with Grok :wink: )
+- RAG
+  - Chromadb
+
+## Diagram
+![image](https://github.com/user-attachments/assets/cbe1eb86-8259-42e5-b477-003e69648a5c)
+
 
 ## Getting Started
 ### Prerequisites
