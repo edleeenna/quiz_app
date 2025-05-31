@@ -53,7 +53,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
                 )}
               >
                 <BookOpen className="h-4 w-4" />
-                <span>Create Quiz</span>
+                <span>Quiz</span>
               </Button>
               <Button
                 variant={activeTab === "past-quizzes" ? "default" : "outline"}
