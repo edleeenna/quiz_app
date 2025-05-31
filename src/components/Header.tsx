@@ -28,13 +28,21 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
           <nav className="hidden md:flex space-x-4 mr-4">
             <Link 
               to="/" 
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm transition-colors ${
+                location.pathname === "/" 
+                  ? "text-foreground font-medium" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               Home
             </Link>
             <Link 
               to="/app" 
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm transition-colors ${
+                location.pathname === "/app" 
+                  ? "text-foreground font-medium" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               App
             </Link>
