@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from '@/components/Header';
+import Navbar from '@/components/Navbar';
 import NotesUploader from '@/components/NotesUploader';
 import NotesList from '@/components/NotesList';
 import QuizGenerator from '@/components/QuizGenerator';
@@ -56,7 +56,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-muted/20">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="flex-1 container py-8 md:py-12">
         <div className="max-w-6xl mx-auto">

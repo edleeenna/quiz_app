@@ -1,10 +1,13 @@
-import { BookOpen, FileText, ArrowRight, Brain, CheckCircle, Upload } from 'lucide-react';
+import { BookOpen, FileText, ArrowRight, Brain, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/50 to-muted">
+      <Navbar />
+      
       {/* Hero Section */}
       <div className="container px-4 py-32 mx-auto text-center relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -41,7 +44,7 @@ const Home = () => {
         <div className="grid md:grid-cols-3 gap-8">
           <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Upload className="h-7 w-7 text-primary" />
+              <FileText className="h-7 w-7 text-primary" />
             </div>
             <h3 className="text-xl font-bold mb-3">Upload Notes</h3>
             <p className="text-muted-foreground leading-relaxed">
