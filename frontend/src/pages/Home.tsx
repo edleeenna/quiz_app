@@ -21,7 +21,7 @@ const Home = () => {
           </h1>
         </div>
         <p className="mt-8 text-xl text-muted-foreground max-w-2xl mx-auto">
-          Harness the power of AI to convert your study materials into personalized quizzes that adapt to your learning style.
+          Harness the power of AI to convert your study materials into personalized quizzes.
         </p>
         <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group relative overflow-hidden">
@@ -48,7 +48,7 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">Upload Notes</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Import your study materials in various formats including text and PDF files. Our system processes your content intelligently.
+              Import your study materials in various formats including text, DOCX and PDF files or enter your notes manually. 
             </p>
           </div>
 
@@ -58,7 +58,7 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">AI Processing</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Our advanced AI analyzes your notes and creates relevant multiple-choice questions tailored to your content.
+            Our AI analyzes your notes and creates relevant multiple-choice questions tailored to your content.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ const Home = () => {
               Ready to Transform Your Learning?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join thousands of students who are already using AI-powered quizzes to enhance their study experience.
+              Join a singular student who is already using AI-powered quizzes to enhance their study experience.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group">
               <Link to="/app">
@@ -102,17 +102,7 @@ const Home = () => {
             <p className="text-sm text-muted-foreground">
               QuizNotes © {new Date().getFullYear()} - Transform your notes into quizzes
             </p>
-            <div className="flex items-center gap-6">
-              <Link to="/app" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Get Started
-              </Link>
-              <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Features
-              </a>
-              <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </a>
-            </div>
+       
           </div>
         </div>
       </footer>
