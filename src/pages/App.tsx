@@ -9,7 +9,7 @@ import { NoteFile, QuizQuestion } from '@/types';
 import { SavedQuiz, saveQuiz } from '@/lib/quiz-storage';
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState<"notes" | "quiz">("notes");
+  const [activeTab, setActiveTab] = useState<"notes" | "quiz" | "quiz-list">("notes");
   const [notes, setNotes] = useState<NoteFile[]>([]);
   const [selectedNote, setSelectedNote] = useState<NoteFile | null>(null);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
@@ -46,6 +46,7 @@ const App = () => {
     setQuizQuestions(quiz.questions);
     setQuizActive(true);
     setSelectedNote(null);
+    setActiveTab("quiz");
   };
 
   const restartQuiz = () => {
@@ -53,6 +54,7 @@ const App = () => {
     setQuizQuestions([]);
     setSelectedNote(null);
     setSelectedQuiz(null);
+    setActiveTab("quiz-list");
   };
 
   return (
@@ -77,23 +79,22 @@ const App = () => {
             </div>
           )}
           
+          {activeTab === "quiz-list" && (
+            <div className="animate-fade-in">
+              <QuizList onSelectQuiz={handleSelectSavedQuiz} />
+            </div>
+          )}
+          
           {activeTab === "quiz" && (
             <div className="max-w-2xl mx-auto animate-fade-in space-y-8">
               <div className="relative">
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
                 <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
                 {!quizActive ? (
-                  <>
-                    {!selectedNote && (
-                      <QuizList onSelectQuiz={handleSelectSavedQuiz} />
-                    )}
-                    {selectedNote && (
-                      <QuizGenerator 
-                        selectedNote={selectedNote}
-                        onQuizGenerated={handleQuizGenerated}
-                      />
-                    )}
-                  </>
+                  <QuizGenerator 
+                    selectedNote={selectedNote}
+                    onQuizGenerated={handleQuizGenerated}
+                  />
                 ) : (
                   <QuizRunner 
                     questions={quizQuestions}
