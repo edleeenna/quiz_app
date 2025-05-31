@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Plus, File, X, FileText, Upload } from 'lucide-react';
+import { Plus, File, FileText, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,7 +26,6 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   const [exampleQuestions, setExampleQuestions] = useState('');
   const [activeTab, setActiveTab] = useState('upload');
   
-  // For uploaded files
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedContent, setUploadedContent] = useState('');
   const [uploadedExampleQuestions, setUploadedExampleQuestions] = useState('');
@@ -75,14 +73,13 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   
       setUploadedFile(file);
       setUploadedContent(content);
-      setActiveTab('examples'); // Switch to examples tab after upload
+      setActiveTab('examples');
       toast.success("File uploaded successfully. Add example questions if needed.");
     } catch (error) {
       toast.error("Failed to read file");
       console.error("Error reading file:", error);
     }
   };
-  
 
   const handleUploadedNoteSubmit = () => {
     if (!uploadedFile || !uploadedContent) {
@@ -133,44 +130,42 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   return (
     <div className="grid md:grid-cols-2 gap-6 w-full">
       {/* File Uploader */}
-      <Card className="border border-dashed border-border">
+      <Card className="border border-dashed border-border/50 bg-card/50 backdrop-blur-sm">
         <CardContent className="p-6">
           <div
             className={`flex flex-col items-center justify-center h-60 rounded-lg transition-colors ${
-              dragActive ? "bg-accent/20" : "bg-muted/50"
-            }`}
+              dragActive ? "bg-accent/20" : "bg-muted/30"
+            } border-2 border-dashed ${dragActive ? 'border-accent' : 'border-muted'}`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
           >
-            <FileText className="h-10 w-10 text-muted-foreground mb-4" />
+            <FileText className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium mb-2">Drag & drop your notes</p>
-            <p className="text-sm text-muted-foreground mb-4">
-              Upload text files (TXT, MD, DOC). 
-            </p>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground mb-4 text-center">
+              Upload text files (TXT, MD, DOC).<br />
               Large files may not be able to be processed by AI.
             </p>
-            <Button variant="outline" className="relative">
+            <Button variant="outline" className="relative group hover:border-accent hover:text-accent">
               <input
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
                 accept=".txt,.md,.doc,.docx"
                 onChange={handleFileChange}
               />
-              <Plus className="h-4 w-4 mr-2" />
+              <Upload className="h-4 w-4 mr-2 transition-transform group-hover:scale-110" />
               Browse Files
             </Button>
           </div>
         </CardContent>
         {uploadedFile && (
-          <CardFooter className="flex justify-between items-center bg-muted/30 p-3 border-t">
+          <CardFooter className="flex justify-between items-center bg-muted/30 p-3 border-t backdrop-blur-sm">
             <div className="flex items-center">
               <FileText className="h-4 w-4 mr-2 text-primary" />
               <span className="text-sm truncate max-w-[180px]">{uploadedFile.name}</span>
             </div>
-            <Button size="sm" onClick={handleUploadedNoteSubmit}>
+            <Button size="sm" onClick={handleUploadedNoteSubmit} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
               <Plus className="h-4 w-4 mr-2" />
               Save Note
             </Button>
@@ -179,7 +174,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       </Card>
 
       {/* Manual Entry or Example Questions for Uploaded File */}
-      <Card>
+      <Card className="bg-card/50 backdrop-blur-sm">
         <CardHeader>
           {uploadedFile ? (
             <>
@@ -211,15 +206,13 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                 <Textarea
                   id="uploaded-example-questions"
                   placeholder={`Enter example questions to guide the AI in quiz generation. Try to match format below or AI might not return a good result...\n e.g.\nQ: What is the capital of France?\na) Berlin\nb) Madrid\nc) Paris (correct)\nd) Rome`}
-                  className="min-h-[200px]"
+                  className="min-h-[200px] bg-background/50"
                   value={uploadedExampleQuestions}
                   onChange={(e) => setUploadedExampleQuestions(e.target.value)}
                 />
-
                 <p className="text-xs text-muted-foreground mt-1">
                   Format: Write one question per line, followed by options (a, b, c, d) and indicate the correct answer.
-                  </p>
-                
+                </p>
               </div>
             </div>
           ) : (
@@ -238,6 +231,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     placeholder="Enter note title"
                     value={noteName}
                     onChange={(e) => setNoteName(e.target.value)}
+                    className="bg-background/50"
                   />
                 </div>
                 <div className="space-y-2">
@@ -247,7 +241,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   <Textarea
                     id="note-content"
                     placeholder="Enter your notes here..."
-                    className="min-h-[150px]"
+                    className="min-h-[150px] bg-background/50"
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}
                   />
@@ -261,7 +255,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   <Textarea
                     id="example-questions"
                     placeholder={`Enter example questions to guide the AI in quiz generation. Try to match format below or AI might not return a good result...\n \nQ: What is the capital of France?\na) Berlin\nb) Madrid\nc) Paris (correct)\nd) Rome`}
-                    className="min-h-[200px]"
+                    className="min-h-[200px] bg-background/50"
                     value={exampleQuestions}
                     onChange={(e) => setExampleQuestions(e.target.value)}
                   />
@@ -275,12 +269,12 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
         </CardContent>
         <CardFooter>
           {uploadedFile ? (
-            <Button onClick={handleUploadedNoteSubmit} className="w-full">
+            <Button onClick={handleUploadedNoteSubmit} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
               <Plus className="h-4 w-4 mr-2" />
               Save Note with Examples
             </Button>
           ) : (
-            <Button onClick={handleManualNoteSubmit} className="w-full">
+            <Button onClick={handleManualNoteSubmit} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
               <Plus className="h-4 w-4 mr-2" />
               Create Note
             </Button>
