@@ -7,11 +7,15 @@ A full-stack application that generates quizzes from your notes using AI.
 - Backend deployed on Render.com (a free instance, so it will go to sleep with inactivity. Please note that this means AI generation will be slow as the backend reboots :smile: )
 
 ## Features
-- Upload text files or PDFs to extract content
+- Upload text files, DOCX or PDFs to extract content
 - Manually enter notes and study materials
 - Add example questions to guide the AI
 - Generate multiple-choice quizzes from your notes
 - Take quizzes and track your progress
+- View past quizzes and retake them
+
+## Future Scope
+- Implement RAG
 
 ## Tech Stack
 
