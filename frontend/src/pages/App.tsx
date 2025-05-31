@@ -53,6 +53,7 @@ const App = () => {
     setQuizQuestions([]);
     setSelectedNote(null);
     setSelectedQuiz(null);
+    setActiveTab("past-quizzes");
   };
 
   return (
@@ -103,7 +104,10 @@ const App = () => {
               <div className="relative">
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
                 <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-                <QuizList onSelectQuiz={handleSelectSavedQuiz} />
+                <QuizList 
+                  onSelectQuiz={handleSelectSavedQuiz} 
+                  setActiveTab={setActiveTab}
+                />
               </div>
             </div>
           )}

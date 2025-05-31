@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSavedQuizzes, deleteQuiz, SavedQuiz } from "@/lib/quiz-storage";
-import { BookOpen, Trash, History, Trophy } from "lucide-react";
+import { BookOpen, Trash, History, Trophy, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 interface QuizListProps {
   onSelectQuiz: (quiz: SavedQuiz) => void;
+  setActiveTab?: (tab: "notes" | "quiz" | "past-quizzes") => void;
 }
 
-const QuizList = ({ onSelectQuiz }: QuizListProps) => {
+const QuizList = ({ onSelectQuiz, setActiveTab }: QuizListProps) => {
   const [quizzes, setQuizzes] = useState<SavedQuiz[]>([]);
 
   useEffect(() => {
@@ -20,6 +21,13 @@ const QuizList = ({ onSelectQuiz }: QuizListProps) => {
     deleteQuiz(id);
     setQuizzes(getSavedQuizzes());
     toast.success("Quiz deleted successfully");
+  };
+
+  const handleTakeQuiz = (quiz: SavedQuiz) => {
+    onSelectQuiz(quiz);
+    if (setActiveTab) {
+      setActiveTab("quiz");
+    }
   };
 
   if (quizzes.length === 0) {
@@ -72,11 +80,11 @@ const QuizList = ({ onSelectQuiz }: QuizListProps) => {
             </Button>
             <Button
               size="sm"
-              onClick={() => onSelectQuiz(quiz)}
-              className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              onClick={() => handleTakeQuiz(quiz)}
+              className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all group-hover:scale-105"
             >
-              <BookOpen className="h-4 w-4 mr-1" />
               Take Quiz
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Button>
           </CardFooter>
         </Card>
