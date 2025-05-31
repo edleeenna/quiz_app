@@ -36,15 +36,63 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Rest of the Home page content remains unchanged */}
       {/* Features Section */}
       <div className="container px-4 py-24">
-        {/* Existing features section content */}
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          How It Works
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
+            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Upload className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Upload Notes</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Import your study materials in various formats including text and PDF files. Our system processes your content intelligently.
+            </p>
+          </div>
+
+          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
+            <div className="h-14 w-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Brain className="h-7 w-7 text-secondary" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">AI Processing</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Our advanced AI analyzes your notes and creates relevant multiple-choice questions tailored to your content.
+            </p>
+          </div>
+
+          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
+            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <CheckCircle className="h-7 w-7 text-accent" />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Take Quizzes</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Test your knowledge with interactive quizzes and track your progress as you learn and improve.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* CTA Section */}
       <div className="container px-4 py-24">
-        {/* Existing CTA section content */}
+        <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 p-12 overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+          <div className="relative text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to Transform Your Learning?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join thousands of students who are already using AI-powered quizzes to enhance their study experience.
+            </p>
+            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group">
+              <Link to="/app">
+                Get Started Now
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Footer */}
