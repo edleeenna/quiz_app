@@ -126,27 +126,29 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
           <div className="space-y-4">
             <h3 className="font-medium">Question Summary</h3>
             {questions.map((q, idx) => (
-              <div key={q.id} className="flex items-center space-x-3 p-3 rounded-md bg-muted/30">
-                <div className="flex-shrink-0">
+              <div key={q.id} className="flex items-start space-x-3 p-4 rounded-md bg-muted/30">
+                <div className="flex-shrink-0 mt-1">
                   {userAnswers[q.id] === q.correctAnswer ? (
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
                     <X className="h-5 w-5 text-destructive" />
                   )}
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Question {idx + 1}</p>
-                  <p className="text-xs text-muted-foreground truncate">{q.question}</p>
-                  <div className="mt-1 text-xs">
-                    <span className="text-muted-foreground">Your answer: </span>
-                    <span className={userAnswers[q.id] === q.correctAnswer ? "text-green-500" : "text-destructive"}>
-                      {userAnswers[q.id]}
-                    </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium mb-1">Question {idx + 1}</p>
+                  <p className="text-sm text-muted-foreground break-words">{q.question}</p>
+                  <div className="mt-2 space-y-1 text-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="text-muted-foreground whitespace-nowrap">Your answer:</span>
+                      <span className={`break-words flex-1 ${userAnswers[q.id] === q.correctAnswer ? "text-green-500" : "text-destructive"}`}>
+                        {userAnswers[q.id]}
+                      </span>
+                    </div>
                     {userAnswers[q.id] !== q.correctAnswer && (
-                      <>
-                        <span className="text-muted-foreground ml-2">Correct answer: </span>
-                        <span className="text-green-500">{q.correctAnswer}</span>
-                      </>
+                      <div className="flex items-start gap-2">
+                        <span className="text-muted-foreground whitespace-nowrap">Correct:</span>
+                        <span className="text-green-500 break-words flex-1">{q.correctAnswer}</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -198,7 +200,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         />
       </CardHeader>
       <CardContent className="space-y-6">
-        <h2 className="text-xl font-medium">{currentQuestion.question}</h2>
+        <h2 className="text-xl font-medium break-words">{currentQuestion.question}</h2>
         
         <div className="space-y-3">
           {currentQuestion.options.map((option, idx) => (
@@ -211,7 +213,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
                   : 'border-border hover:border-primary/50 hover:bg-muted/50'
               }`}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-start space-x-3">
                 <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center border ${
                   selectedAnswer === option 
                     ? 'border-primary text-primary'
@@ -219,7 +221,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
                 }`}>
                   <span className="text-sm">{String.fromCharCode(65 + idx)}</span>
                 </div>
-                <span className="flex-1">{option}</span>
+                <span className="flex-1 break-words">{option}</span>
               </div>
             </button>
           ))}
@@ -228,7 +230,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         {showExplanation && (
           <div className="p-4 bg-muted/30 rounded-lg border border-border">
             <h3 className="font-medium mb-2">Explanation</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground break-words">
               {selectedAnswer === currentQuestion.correctAnswer 
                 ? "That's correct! Good job." 
                 : `The correct answer is "${currentQuestion.correctAnswer}".`}
@@ -248,7 +250,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
         
         <div className="flex space-x-2">
           {selectedAnswer && !showExplanation && (
-            <Button variant="outline\" onClick={handleShowExplanation}>
+            <Button variant="outline" onClick={handleShowExplanation}>
               Check Answer
             </Button>
           )}
