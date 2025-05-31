@@ -33,7 +33,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
         <div className="flex items-center space-x-4">
           {!isHome && (
             <Link to="/">
-              <Button variant="ghost" className="flex items-center space-x-2">
+              <Button variant="ghost\" className="flex items-center space-x-2">
                 <Home className="h-4 w-4" />
                 <span>Home</span>
               </Button>
