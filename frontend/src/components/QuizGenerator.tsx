@@ -151,7 +151,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
             value={numQuestions}
             onChange={(e) => setNumQuestions(Number(e.target.value))}
           >
-            {[3, 5, 10, 15, 20].map((count) => (
+            {[5, 10, 15].map((count) => (
               <option key={count} value={count}>
                 {count}
               </option>

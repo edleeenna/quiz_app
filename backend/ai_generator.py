@@ -1,62 +1,67 @@
 from models import NotesFile, QuizQuestion
 from dotenv import load_dotenv
-
-import os
-import re
-import requests
+from rag import store_note_chunks, retrieve_context  # 👈 Import RAG functions
+import os, re, requests
 
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
+    # Step 1: Store the notes in ChromaDB
+    store_note_chunks(notes_file.id, notes_file.content)
+
+    # Step 2: Retrieve context relevant to quiz generation
+    query = "Generate multiple-choice quiz questions"
+    context = retrieve_context(notes_file.id, query)
+
+    # Step 3: Construct the prompt using RAG context
     prompt = f"""
-   Generate {notes_file.num_questions} multiple-choice quiz questions based on the following notes.
+    You are a quiz generator AI.
 
-        Notes:
-        {notes_file.content}
+    Based on the following extracted context from notes:
+    {context}
 
-        Example Questions:
-        {notes_file.example_questions or 'None'}
+    Generate {notes_file.num_questions} multiple-choice quiz questions.
 
-        Instructions:
-        - Return exactly {notes_file.num_questions} questions.
-        - Each question must have 4 answer options labeled a), b), c), and d).
-        - Randomize the order of the options.
-        - The correct answer MUST be **exactly one of the 4 options**.
-        - The correct answer MUST match one of the options **verbatim**.
-        - All options should be plausible, but only one should be correct.
-        - Do NOT include questions where the correct answer is not present in the options.
-        - Ensure clarity, accuracy, and relevance to the notes.
-        - Use the example questions to guide style and format. 
+    Example Questions:
+    {notes_file.example_questions or 'None'}
 
-        Output Format (repeat exactly 10 times):
-        Q: [Your question here]
-        a) ...
-        b) ...
-        c) ...
-        d) ...
-        Answer: [One of a), b), c), or d)]
-        """
-    
+    Instructions:
+    - Return exactly {notes_file.num_questions} questions.
+    - Each question must have 4 answer options labeled a), b), c), and d).
+    - Randomize the order of the options.
+    - The correct answer MUST be **exactly one of the 4 options**.
+    - The correct answer MUST match one of the options **verbatim**.
+    - All options should be plausible, but only one should be correct.
+    - Do NOT include questions where the correct answer is not present in the options.
+    - Ensure clarity, accuracy, and relevance to the notes.
+    - Use the example questions to guide style and format. 
+
+    Output Format:
+    Q: ...
+    a) ...
+    b) ...
+    c) ...
+    d) ...
+    Answer: ...
+    """
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "mistral-saba-24b",  # Valid Groq model
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
+        "model": "mistral-saba-24b",
+        "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": 2048  # Add max_tokens parameter
+        
     }
-    
+
     response = requests.post(GROQ_API_URL, json=payload, headers=headers)
     response.raise_for_status()
     content = response.json()["choices"][0]["message"]["content"]
- 
+
     return parse_questions(content)
 
 
