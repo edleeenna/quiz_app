@@ -9,24 +9,26 @@ interface HeaderProps {
 
 const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
   return (
-    <header className="w-full py-4 border-b border-border bg-card">
+    <header className="w-full py-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setActiveTab("notes")}
-            className="bg-gradient-to-r from-primary to-secondary rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            className="bg-gradient-to-r from-primary to-secondary rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary group transition-transform hover:scale-105"
             aria-label="Go to Notes"
           >
-            <BookOpen className="h-6 w-6 text-white" />
+            <BookOpen className="h-6 w-6 text-white transition-transform group-hover:scale-110" />
           </button>
-          <h1 className="text-xl font-bold">QuizNotes</h1>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            QuizNotes
+          </h1>
         </div>
 
         <div className="flex space-x-2">
           <Button
             variant={activeTab === "notes" ? "default" : "outline"}
             onClick={() => setActiveTab("notes")}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 transition-all hover:-translate-y-0.5"
           >
             <FileText className="h-4 w-4" />
             <span>Notes</span>
@@ -34,7 +36,7 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
           <Button
             variant={activeTab === "quiz" ? "default" : "outline"}
             onClick={() => setActiveTab("quiz")}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 transition-all hover:-translate-y-0.5"
           >
             <BookOpen className="h-4 w-4" />
             <span>Quiz</span>

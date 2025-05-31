@@ -59,37 +59,41 @@ const App = () => {
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="flex-1 container py-8">
-        {activeTab === "notes" && (
-          <div className="space-y-8">
-            <NotesUploader addNote={addNote} />
-            <NotesList 
-              notes={notes}
-              deleteNote={deleteNote}
-              selectNoteForQuiz={selectNoteForQuiz}
-            />
-          </div>
-        )}
-        
-        {activeTab === "quiz" && (
-          <div className="max-w-2xl mx-auto">
-            {!quizActive ? (
-              <QuizGenerator 
-                selectedNote={selectedNote}
-                onQuizGenerated={handleQuizGenerated}
+        <div className="max-w-6xl mx-auto">
+          {activeTab === "notes" && (
+            <div className="space-y-8 animate-fade-in">
+              <NotesUploader addNote={addNote} />
+              <NotesList 
+                notes={notes}
+                deleteNote={deleteNote}
+                selectNoteForQuiz={selectNoteForQuiz}
               />
-            ) : (
-              <QuizRunner 
-                questions={quizQuestions}
-                restartQuiz={restartQuiz}
-              />
-            )}
-          </div>
-        )}
+            </div>
+          )}
+          
+          {activeTab === "quiz" && (
+            <div className="max-w-2xl mx-auto animate-fade-in">
+              {!quizActive ? (
+                <QuizGenerator 
+                  selectedNote={selectedNote}
+                  onQuizGenerated={handleQuizGenerated}
+                />
+              ) : (
+                <QuizRunner 
+                  questions={quizQuestions}
+                  restartQuiz={restartQuiz}
+                />
+              )}
+            </div>
+          )}
+        </div>
       </main>
       
-      <footer className="py-4 text-center text-sm text-muted-foreground border-t">
+      <footer className="py-6 text-center text-sm text-muted-foreground border-t bg-muted/10">
         <div className="container">
-          QuizNotes © {new Date().getFullYear()} - Turn your notes into quizzes
+          <p className="font-medium">
+            QuizNotes © {new Date().getFullYear()} - Transform your notes into quizzes
+          </p>
         </div>
       </footer>
     </div>
