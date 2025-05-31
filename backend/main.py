@@ -22,6 +22,7 @@ async def generate_quiz_endpoint(
     id: str = Form(...),
     name: str = Form(...),
     content: str = Form(...),
+    num_questions: str = Form(...),
     example_questions: Optional[str] = Form(None)
 ):
     try:
@@ -29,6 +30,7 @@ async def generate_quiz_endpoint(
             id=id,
             name=name,
             content=content,
+            num_questions=num_questions,
             example_questions=example_questions
         )
         questions = generate_quiz_from_notes(notes_file_data)

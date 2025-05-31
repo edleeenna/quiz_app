@@ -11,7 +11,7 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     prompt = f"""
-   Generate 10 multiple-choice quiz questions based on the following notes.
+   Generate {notes_file.num_questions} multiple-choice quiz questions based on the following notes.
 
         Notes:
         {notes_file.content}
@@ -20,7 +20,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
         {notes_file.example_questions or 'None'}
 
         Instructions:
-        - Return exactly 10 questions.
+        - Return exactly {notes_file.num_questions} questions.
         - Each question must have 4 answer options labeled a), b), c), and d).
         - Randomize the order of the options.
         - The correct answer MUST be **exactly one of the 4 options**.

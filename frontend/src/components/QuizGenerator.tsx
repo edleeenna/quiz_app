@@ -29,17 +29,18 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isExamplesOpen, setIsExamplesOpen] = useState(false);
-  
+  const [numQuestions, setNumQuestions] = useState(5);
+
   const generateQuiz = async () => {
     if (!selectedNote) {
       toast.error("Please select a note first");
       return;
     }
-  
+
     toast.warning("Warming up the server... This might take a few seconds.");
     setLoading(true);
     setProgress(10);
-  
+
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev < 90) {
@@ -48,25 +49,26 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         return prev;
       });
     }, 500);
-  
+
     const formData = new FormData();
     formData.append("id", selectedNote.id);
     formData.append("name", selectedNote.name);
     formData.append("content", selectedNote.content);
+    formData.append("num_questions", numQuestions.toString());
     if (selectedNote.exampleQuestions) {
       formData.append("example_questions", selectedNote.exampleQuestions);
     }
-  
+
     try {
-      const response = await fetch('https://quiz-app-zoxs.onrender.com/generate-quiz', {
+      const response = await fetch('http://127.0.0.1:8000/generate-quiz', {
         method: 'POST',
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-    
+
       const data = await response.json();
       if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
         toast.error("No questions were generated.", {
@@ -84,7 +86,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         options: q.options,
         correctAnswer: q.correct_answer,
       }));
-  
+
       clearInterval(interval);
       setProgress(100);
       setTimeout(() => {
@@ -99,7 +101,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
       toast.error("Failed to generate quiz. Please try again.");
     }
   };
-  
+
   if (!selectedNote) {
     return (
       <Card className="border border-dashed border-border/50 bg-card/50 backdrop-blur-sm">
@@ -139,6 +141,22 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
                 : selectedNote.content}
             </p>
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="question-count" className="text-sm font-medium">Number of Questions</label>
+          <select
+            id="question-count"
+            className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+            value={numQuestions}
+            onChange={(e) => setNumQuestions(Number(e.target.value))}
+          >
+            {[3, 5, 10, 15, 20].map((count) => (
+              <option key={count} value={count}>
+                {count}
+              </option>
+            ))}
+          </select>
         </div>
 
         {selectedNote.exampleQuestions && (

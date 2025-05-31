@@ -1,4 +1,5 @@
 # utils.py
+# Not currently in use, but can be used in future for file upload functionality
 from fastapi import UploadFile
 import fitz  # PyMuPDF
 
