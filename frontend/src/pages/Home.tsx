@@ -1,12 +1,15 @@
 import { BookOpen, FileText, ArrowRight, Brain, CheckCircle, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import MainNav from '@/components/MainNav';
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
+      <MainNav />
+      
       {/* Hero Section */}
-      <div className="relative min-h-screen flex items-center">
+      <div className="relative min-h-screen flex items-center pt-20">
         {/* Animated background */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(67,97,238,0.15),rgba(114,9,183,0.15))]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.9),transparent_50%,rgba(0,0,0,0.9))]" />
@@ -56,7 +59,7 @@ const Home = () => {
       </div>
 
       {/* Features Section */}
-      <div className="relative bg-black py-32">
+      <div id="features" className="relative bg-black py-32">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(67,97,238,0.15),transparent_50%)]" />
         <div className="container relative">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-20">
