@@ -3,7 +3,7 @@ import { Check, X, ArrowRight, ArrowLeft, CheckCircle, RefreshCw } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { updateQuizAttempt } from '@/lib/quiz-storage';
+import { updateQuizAttempt } from '@/lib/quiz-storage.ts';
 import { QuizQuestion } from '@/types';
 import { toast } from 'sonner';
 
