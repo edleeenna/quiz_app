@@ -1,24 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import { Check, X, ArrowRight, ArrowLeft, CheckCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { updateQuizAttempt } from '@/lib/quiz-storage';
+import { QuizQuestion } from '@/types';
 import { toast } from 'sonner';
-
-interface QuizQuestion {
-  id: string;
-  question: string;
-  options: string[];
-  correctAnswer: string;
-}
 
 interface QuizRunnerProps {
   questions: QuizQuestion[];
   restartQuiz: () => void;
+  quizId?: string;
 }
 
-const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
+const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -72,6 +67,13 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
       percentage: Math.round((correct / questions.length) * 100)
     };
   };
+
+  useEffect(() => {
+    if (quizCompleted && quizId) {
+      const score = getScore();
+      updateQuizAttempt(quizId, score.percentage);
+    }
+  }, [quizCompleted, quizId]);
 
   const handleShowExplanation = () => {
     setShowExplanation(true);
@@ -135,18 +137,44 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
                 <div className="flex-1">
                   <p className="text-sm font-medium">Question {idx + 1}</p>
                   <p className="text-xs text-muted-foreground truncate">{q.question}</p>
+                  <div className="mt-1 text-xs">
+                    <span className="text-muted-foreground">Your answer: </span>
+                    <span className={userAnswers[q.id] === q.correctAnswer ? "text-green-500" : "text-destructive"}>
+                      {userAnswers[q.id]}
+                    </span>
+                    {userAnswers[q.id] !== q.correctAnswer && (
+                      <>
+                        <span className="text-muted-foreground ml-2">Correct answer: </span>
+                        <span className="text-green-500">{q.correctAnswer}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex gap-2">
           <Button 
-            onClick={restartQuiz} 
-            className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+            variant="outline"
+            onClick={() => {
+              setQuizCompleted(false);
+              setCurrentQuestionIndex(0);
+              setSelectedAnswer(null);
+              setUserAnswers({});
+              setShowExplanation(false);
+            }} 
+            className="flex-1"
           >
             <RefreshCw className="h-4 w-4 mr-2" />
-            Start Another Quiz
+            Retry Quiz
+          </Button>
+          <Button 
+            onClick={restartQuiz} 
+            className="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Quizzes
           </Button>
         </CardFooter>
       </Card>
