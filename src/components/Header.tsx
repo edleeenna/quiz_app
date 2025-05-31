@@ -25,12 +25,12 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <nav className="hidden md:flex space-x-4 mr-4">
+          <nav className="flex space-x-4 mr-4">
             <Link 
               to="/" 
-              className={`text-sm transition-colors ${
+              className={`text-sm font-medium transition-colors hover:-translate-y-0.5 transform duration-200 ${
                 location.pathname === "/" 
-                  ? "text-foreground font-medium" 
+                  ? "text-foreground after:content-[''] after:block after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-secondary" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -38,9 +38,9 @@ const Header = ({ activeTab, setActiveTab }: HeaderProps) => {
             </Link>
             <Link 
               to="/app" 
-              className={`text-sm transition-colors ${
+              className={`text-sm font-medium transition-colors hover:-translate-y-0.5 transform duration-200 ${
                 location.pathname === "/app" 
-                  ? "text-foreground font-medium" 
+                  ? "text-foreground after:content-[''] after:block after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-secondary" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
