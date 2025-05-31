@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/50 to-muted">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
       {/* Hero Section */}
       <div className="container px-4 py-32 mx-auto text-center relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative">
-          <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-          <div className="absolute -top-6 left-[55%] -translate-x-1/2 w-24 h-24 bg-accent/10 rounded-full blur-3xl" />
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-32 h-32 bg-secondary/10 rounded-full blur-3xl" />
+          <div className="absolute -top-6 left-[55%] -translate-x-1/2 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-fade-in relative">
             Transform Your Study Notes Into Smart Quizzes
@@ -73,7 +73,7 @@ const Home = () => {
 
       {/* CTA Section */}
       <div className="container px-4 py-24">
-        <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 p-12 overflow-hidden">
+        <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 p-12 overflow-hidden backdrop-blur-sm">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
           <div className="relative text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -93,7 +93,7 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <footer className="border-t mt-20">
+      <footer className="border-t mt-20 bg-muted/10 backdrop-blur-sm">
         <div className="container px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
