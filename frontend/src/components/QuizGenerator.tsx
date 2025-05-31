@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { BookOpen, Loader, ArrowRight, CheckCircle, FileInput } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -43,11 +44,11 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev < 90) {
-          return prev + Math.floor(Math.random() * 10) + 1;
+          return prev + Math.floor(Math.random() * 10) + 1; // increase 1-10%
         }
         return prev;
       });
-    }, 500);
+    }, 500); // every 500ms
   
     const formData = new FormData();
     formData.append("id", selectedNote.id);
@@ -67,6 +68,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         throw new Error(`API error: ${response.status}`);
       }
     
+  
       const data = await response.json();
       if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
         toast.error("No questions were generated.", {
@@ -75,9 +77,11 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
             onClick: generateQuiz
           }
         });
+        
         throw new Error("No quiz questions were returned. Please check your input and try again.");
-      }
+       
 
+      }
       const questions = data.questions.map((q, index) => ({
         id: `q-${index}`,
         question: q.question,
@@ -102,14 +106,14 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   
   if (!selectedNote) {
     return (
-      <Card className="border border-white/10 bg-card/50 backdrop-blur-sm">
+      <Card className="border border-dashed border-border bg-muted/30 animate-fade-in">
         <CardContent className="p-6 flex flex-col items-center justify-center min-h-[300px] text-center">
-          <BookOpen className="h-12 w-12 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium mb-2 text-white">No note selected</h3>
-          <p className="text-gray-400 mb-4">
+          <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">No note selected</h3>
+          <p className="text-muted-foreground mb-4">
             Please select a note to generate a quiz
           </p>
-          <Button variant="outline" disabled className="border-white/10 text-gray-400">
+          <Button variant="outline" disabled>
             Generate Quiz
           </Button>
         </CardContent>
@@ -118,20 +122,20 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
   }
 
   return (
-    <Card className="animate-fade-in bg-card/50 backdrop-blur-sm border-white/10">
+    <Card className="animate-fade-in">
       <CardHeader>
-        <CardTitle className="text-white">Generate Quiz</CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardTitle>Generate Quiz</CardTitle>
+        <CardDescription>
           Create a multiple-choice quiz from your note
           {selectedNote.exampleQuestions ? " (includes example questions)" : ""}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center space-x-4 p-4 bg-white/5 rounded-lg border border-white/10">
-          <BookOpen className="h-8 w-8 text-theme-blue flex-shrink-0" />
+        <div className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg">
+          <BookOpen className="h-8 w-8 text-primary flex-shrink-0" />
           <div className="flex-1 overflow-hidden">
-            <h3 className="font-medium text-white truncate">{selectedNote.name}</h3>
-            <p className="text-sm text-gray-400 truncate">
+            <h3 className="font-medium truncate">{selectedNote.name}</h3>
+            <p className="text-sm text-muted-foreground truncate">
               {selectedNote.content.length > 80 
                 ? `${selectedNote.content.substring(0, 80)}...` 
                 : selectedNote.content}
@@ -143,24 +147,24 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
           <Collapsible 
             open={isExamplesOpen} 
             onOpenChange={setIsExamplesOpen}
-            className="border border-white/10 rounded-lg p-2"
+            className="border rounded-lg p-2"
           >
             <CollapsibleTrigger asChild>
-              <div className="flex items-center justify-between cursor-pointer p-2 hover:bg-white/5 rounded transition-colors">
+              <div className="flex items-center justify-between cursor-pointer p-2 hover:bg-muted/30 rounded">
                 <div className="flex items-center">
-                  <FileInput className="h-5 w-5 mr-2 text-theme-purple" />
-                  <span className="text-sm font-medium text-white">Example Questions</span>
+                  <FileInput className="h-5 w-5 mr-2 text-primary" />
+                  <span className="text-sm font-medium">Example Questions</span>
                 </div>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted-foreground">
                   {isExamplesOpen ? "Hide" : "Show"}
                 </span>
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-2">
-              <div className="bg-white/5 p-3 rounded text-sm max-h-40 overflow-y-auto text-gray-300">
+              <div className="bg-muted/20 p-3 rounded text-sm max-h-40 overflow-y-auto">
                 <pre className="whitespace-pre-wrap">{selectedNote.exampleQuestions}</pre>
               </div>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 These example questions will be used to guide the AI in generating similar questions.
               </p>
             </CollapsibleContent>
@@ -169,12 +173,12 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
 
         {loading && (
           <div className="space-y-3">
-            <div className="flex justify-between text-sm text-white">
+            <div className="flex justify-between text-sm">
               <span>Generating quiz</span>
               <span>{progress}%</span>
             </div>
             <Progress value={progress} className="h-2" />
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
+            <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
               <Loader className="h-4 w-4 animate-spin" />
               <span>
                 {selectedNote.exampleQuestions 
@@ -189,7 +193,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
         <Button 
           onClick={generateQuiz} 
           disabled={loading}
-          className="w-full bg-gradient-to-r from-theme-blue to-theme-purple hover:opacity-90"
+          className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
         >
           {loading ? (
             <Loader className="h-4 w-4 mr-2 animate-spin" />

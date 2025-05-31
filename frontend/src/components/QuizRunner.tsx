@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Check, X, ArrowRight, ArrowLeft, CheckCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -79,10 +80,10 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
   if (quizCompleted) {
     const score = getScore();
     return (
-      <Card className="animate-fade-in bg-card/50 backdrop-blur-sm border-white/10">
+      <Card className="animate-fade-in">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-white">Quiz Results</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle className="text-2xl">Quiz Results</CardTitle>
+          <CardDescription>
             You've completed the quiz!
           </CardDescription>
         </CardHeader>
@@ -91,7 +92,7 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
             <div className="relative h-36 w-36 flex items-center justify-center">
               <svg className="h-full w-full" viewBox="0 0 100 100">
                 <circle
-                  className="text-white/10 stroke-current"
+                  className="text-muted stroke-current"
                   strokeWidth="10"
                   cx="50"
                   cy="50"
@@ -99,7 +100,7 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
                   fill="transparent"
                 />
                 <circle
-                  className="text-theme-blue stroke-current"
+                  className="text-primary stroke-current"
                   strokeWidth="10"
                   strokeLinecap="round"
                   cx="50"
@@ -112,28 +113,28 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-3xl font-bold text-white">{score.percentage}%</div>
+                <div className="text-3xl font-bold">{score.percentage}%</div>
               </div>
             </div>
-            <p className="mt-4 text-lg font-medium text-white">
+            <p className="mt-4 text-lg font-medium">
               You got {score.correct} out of {score.total} questions correct
             </p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-medium text-white">Question Summary</h3>
+            <h3 className="font-medium">Question Summary</h3>
             {questions.map((q, idx) => (
-              <div key={q.id} className="flex items-center space-x-3 p-3 rounded-md bg-white/5 border border-white/10">
+              <div key={q.id} className="flex items-center space-x-3 p-3 rounded-md bg-muted/30">
                 <div className="flex-shrink-0">
                   {userAnswers[q.id] === q.correctAnswer ? (
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   ) : (
-                    <X className="h-5 w-5 text-red-500" />
+                    <X className="h-5 w-5 text-destructive" />
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-white">Question {idx + 1}</p>
-                  <p className="text-xs text-gray-400 truncate">{q.question}</p>
+                  <p className="text-sm font-medium">Question {idx + 1}</p>
+                  <p className="text-xs text-muted-foreground truncate">{q.question}</p>
                 </div>
               </div>
             ))}
@@ -142,7 +143,7 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
         <CardFooter>
           <Button 
             onClick={restartQuiz} 
-            className="w-full bg-gradient-to-r from-theme-blue to-theme-purple hover:opacity-90"
+            className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           >
             <RefreshCw className="h-4 w-4 mr-2" />
             Start Another Quiz
@@ -153,13 +154,13 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
   }
 
   return (
-    <Card className="animate-fade-in bg-card/50 backdrop-blur-sm border-white/10">
+    <Card className="animate-fade-in">
       <CardHeader>
         <div className="flex justify-between mb-2">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground">
             Question {currentQuestionIndex + 1} of {questions.length}
           </p>
-          <p className="text-sm font-medium text-white">
+          <p className="text-sm font-medium">
             {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}%
           </p>
         </div>
@@ -169,7 +170,7 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
         />
       </CardHeader>
       <CardContent className="space-y-6">
-        <h2 className="text-xl font-medium text-white">{currentQuestion.question}</h2>
+        <h2 className="text-xl font-medium">{currentQuestion.question}</h2>
         
         <div className="space-y-3">
           {currentQuestion.options.map((option, idx) => (
@@ -178,15 +179,15 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
               onClick={() => handleAnswerSelect(option)}
               className={`w-full p-4 text-left rounded-lg transition-colors border ${
                 selectedAnswer === option 
-                  ? 'border-theme-blue bg-theme-blue/10 text-white'
-                  : 'border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300'
+                  ? 'border-primary bg-primary/10'
+                  : 'border-border hover:border-primary/50 hover:bg-muted/50'
               }`}
             >
               <div className="flex items-center space-x-3">
                 <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center border ${
                   selectedAnswer === option 
-                    ? 'border-theme-blue text-theme-blue'
-                    : 'border-gray-500 text-gray-500'
+                    ? 'border-primary text-primary'
+                    : 'border-muted-foreground text-muted-foreground'
                 }`}>
                   <span className="text-sm">{String.fromCharCode(65 + idx)}</span>
                 </div>
@@ -197,9 +198,9 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
         </div>
         
         {showExplanation && (
-          <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-            <h3 className="font-medium text-white mb-2">Explanation</h3>
-            <p className="text-gray-400">
+          <div className="p-4 bg-muted/30 rounded-lg border border-border">
+            <h3 className="font-medium mb-2">Explanation</h3>
+            <p className="text-muted-foreground">
               {selectedAnswer === currentQuestion.correctAnswer 
                 ? "That's correct! Good job." 
                 : `The correct answer is "${currentQuestion.correctAnswer}".`}
@@ -212,7 +213,6 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
           variant="outline" 
           onClick={goToPreviousQuestion}
           disabled={currentQuestionIndex === 0}
-          className="border-white/10 text-gray-300 hover:bg-white/5 hover:text-white"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Previous
@@ -220,18 +220,14 @@ const QuizRunner = ({ questions, restartQuiz }: QuizRunnerProps) => {
         
         <div className="flex space-x-2">
           {selectedAnswer && !showExplanation && (
-            <Button 
-              variant="outline" 
-              onClick={handleShowExplanation}
-              className="border-white/10 text-gray-300 hover:bg-white/5 hover:text-white"
-            >
+            <Button variant="outline" onClick={handleShowExplanation}>
               Check Answer
             </Button>
           )}
           <Button 
             onClick={goToNextQuestion}
             disabled={!selectedAnswer}
-            className={selectedAnswer ? 'bg-gradient-to-r from-theme-blue to-theme-purple hover:opacity-90' : ''}
+            className={selectedAnswer ? 'bg-gradient-to-r from-primary to-secondary hover:opacity-90' : ''}
           >
             {currentQuestionIndex < questions.length - 1 ? (
               <>
