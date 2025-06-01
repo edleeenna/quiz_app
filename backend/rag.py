@@ -1,6 +1,7 @@
 import os
 import uuid
 from pinecone import Pinecone, ServerlessSpec
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 
@@ -92,8 +93,6 @@ def retrieve_context(notes_id: str, query: str, top_k: int = 5) -> str:
     except Exception as e:
         print(f"[ERROR] Failed to retrieve context: {e}")
         raise
-
-import numpy as np
 
 def delete_note_chunks(notes_id: str):
     print(f"[DEBUG] Retrieving IDs for vectors with notes_id={notes_id}...")
