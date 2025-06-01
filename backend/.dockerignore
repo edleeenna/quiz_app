@@ -1,16 +1,16 @@
+# Ignore frontend folder and other unnecessary files
+frontend/
+.git/
+.gitignore
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.db
-*.sqlite
+node_modules/
+*.onnx
+*.pt
+*.bin
 *.log
+*.md
+tests/
 venv/
 .env
-*.onnx
-*.bin
-*.pt
-*.ckpt
-models/
-data/
-node_modules/
+
