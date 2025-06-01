@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder /install /usr/local
 
     # Debugging: Inspect files in context
-RUN echo "Files in context:" && ls -al || echo "No files found" && du -sh * || echo "No directories found"
+RUN echo "Files in context:" && ls -al && (du -sh * || echo "No directories found")
 
 
 # Copy app code
