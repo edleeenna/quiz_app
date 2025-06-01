@@ -1,10 +1,6 @@
 fastapi
 uvicorn
-pydantic
-python-multipart
-PyMuPDF
-requests
-dotenv
-sentence-transformers 
-langchain
 pinecone
+sentence-transformers==2.2.2
+scikit-learn
+python-dotenv
