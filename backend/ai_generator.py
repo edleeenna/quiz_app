@@ -15,7 +15,9 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     store_note_chunks(notes_file.id, notes_file.content)
 
     # Step 2: Retrieve context relevant to quiz generation
+
     query = "Important information and facts suitable for quiz questions"
+
     context = retrieve_context(notes_file.id, query)
 
     # Step 3: Construct the prompt using RAG context

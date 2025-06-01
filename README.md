@@ -13,10 +13,8 @@ A full-stack application that generates quizzes from your notes using AI.
 - Generate multiple-choice quizzes from your notes
 - Take quizzes and track your progress
 - View past quizzes and retake them
-
-## Future Scope
-- Implement RAG
-
+- RAG with Pinecone
+  
 ## Tech Stack
 
 - Frontend: React, Typescript
