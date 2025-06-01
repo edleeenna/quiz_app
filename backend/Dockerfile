@@ -32,12 +32,14 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=builder /install /usr/local
 
-    # Debugging: Inspect files in context
-RUN echo "Files in context:" && ls -al && (du -sh * || echo "No directories found")
+
 
 
 # Copy app code
 COPY . .
+
+    # Debugging: Inspect files in context
+RUN echo "Files in context:" && ls -al && (du -sh * || echo "No directories found")
 
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
