@@ -30,13 +30,13 @@ RUN apt-get update && apt-get install -y \
     libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# ✅ Copy installed packages from builder
 COPY --from=builder /install /usr/local
 
-RUN echo "Files in context:" && ls -al && du -sh *
+    # Debugging: Inspect files in context
+RUN echo "Files in context:" && ls -al || echo "No files found" && du -sh * || echo "No directories found"
 
 
-# ✅ Copy app code
+# Copy app code
 COPY . .
 
 EXPOSE 8000
