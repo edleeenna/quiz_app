@@ -13,7 +13,6 @@ A full-stack application that generates quizzes from your notes using AI.
 - Generate multiple-choice quizzes from your notes
 - Take quizzes and track your progress
 - View past quizzes and retake them
-- RAG with Pinecone
   
 ## Tech Stack
 
@@ -21,7 +20,8 @@ A full-stack application that generates quizzes from your notes using AI.
 - Backend: FastAPI (Python)
 - AI Integration: Groq API for quiz generation (NOT to be confused with Grok :wink: )
 - RAG
-  - Chromadb
+  - Pinecone
+-Docker
 
 ## Diagram
 ![image](https://github.com/user-attachments/assets/cbe1eb86-8259-42e5-b477-003e69648a5c)
