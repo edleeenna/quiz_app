@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y \
 # ✅ Copy installed packages from builder
 COPY --from=builder /install /usr/local
 
+RUN echo "Files in context:" && ls -al && du -sh *
+
+
 # ✅ Copy app code
 COPY . .
 
