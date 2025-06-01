@@ -1,10 +1,8 @@
 from typing import Optional
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import NotesFile, QuizResponse, QuizQuestion, NotesFileResponse
+from models import NotesFile, QuizResponse
 from ai_generator import generate_quiz_from_notes
-from utils import extract_text_from_file
-import uuid
 
 app = FastAPI()
 
