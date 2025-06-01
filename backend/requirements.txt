@@ -5,9 +5,6 @@ python-multipart
 PyMuPDF
 requests
 dotenv
-chromadb 
 sentence-transformers 
-openai
 langchain
 pinecone
-
