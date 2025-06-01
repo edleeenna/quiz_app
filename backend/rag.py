@@ -1,40 +1,121 @@
 import os
 import uuid
-import chromadb
-from chromadb.utils import embedding_functions
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from pinecone import Pinecone, ServerlessSpec
+import numpy as np
+from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
 
+load_dotenv()
 
-EMBEDDING_MODEL = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-CHROMA_DIR = "rag_chroma_store"
+# Initialize Pinecone client
+pinecone_client = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
-client = chromadb.PersistentClient(path=CHROMA_DIR)
-collection = client.get_or_create_collection(name="quiz_notes", embedding_function=EMBEDDING_MODEL)
-
-# --- Configurable chunking ---
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-
-
-def store_note_chunks(note_id: str, notes_content: str):
-    """Split and store notes with metadata for scoped retrieval."""
-    chunks = text_splitter.split_text(notes_content)
-    ids = [f"{note_id}_{i}_{uuid.uuid4()}" for i in range(len(chunks))]
-
-    metadatas = [{"note_id": note_id, "type": "quiz_chunk"}] * len(chunks)
-    collection.add(documents=chunks, ids=ids, metadatas=metadatas)
-    print(f"[RAG] Stored {len(chunks)} chunks for note_id={note_id}")
-
-
-def retrieve_context(note_id: str, query: str, top_k: int = 5) -> str:
-    """Retrieve relevant context chunks for a given query scoped to a note_id."""
-    results = collection.query(
-        query_texts=[query],
-        n_results=top_k,
-        where={"note_id": note_id}
+# Connect to or create the index
+index_name = "quiz-notes"
+if index_name not in [i.name for i in pinecone_client.list_indexes()]:
+    pinecone_client.create_index(
+        name=index_name,
+        dimension=384,
+        metric="cosine",
+        spec=ServerlessSpec(
+            cloud="aws",
+            region=os.getenv("PINECONE_ENV")  # e.g., "us-west-2"
+        )
     )
 
-    retrieved_docs = results.get("documents", [[]])[0]
-    unique_chunks = list(dict.fromkeys(retrieved_docs))  # remove duplicates, preserve order
+# Connect to the index
+index = pinecone_client.Index(index_name)
 
-    print(f"[RAG] Retrieved {len(unique_chunks)} unique chunks for query")
-    return "\n\n".join(unique_chunks[:top_k])
+# Use a small embedding model
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+
+# Use a small embedding model
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+
+def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
+    print(f"[DEBUG] Storing note chunks for notes_id={notes_id}...")
+
+    chunks = [content[i:i+chunk_size] for i in range(0, len(content), chunk_size)]
+    print(f"[DEBUG] Created {len(chunks)} chunks.")
+
+    embeddings = embedding_model.encode(chunks)  # shape: (n_chunks, 384)
+    print(f"[DEBUG] Generated embeddings for chunks.")
+
+    vectors = []
+    for emb, chunk in zip(embeddings, chunks):
+        emb_list = emb.tolist()  # Convert NumPy array to plain Python list
+        metadata = {"notes_id": str(notes_id), "text": str(chunk)}
+        vector_id = f"{notes_id}-{uuid.uuid4()}"
+        vectors.append((vector_id, emb_list, metadata))
+
+    print(f"[DEBUG] Prepared {len(vectors)} vectors for upsert.")
+
+    try:
+        index.upsert(vectors=vectors)
+        print("[DEBUG] Upsert successful.")
+    except Exception as e:
+        print(f"[ERROR] Upsert failed: {e}")
+        raise
+
+def retrieve_context(notes_id: str, query: str, top_k: int = 5) -> str:
+    """Retrieve top-k relevant chunks for a query scoped to a notes_id."""
+    print(f"[DEBUG] Retrieving context for notes_id={notes_id} and query='{query}'...")
+    try:
+        # Generate embedding for the query
+        query_embedding = embedding_model.encode([query])[0].tolist()
+        print(f"[DEBUG] Query embedding: {query_embedding[:10]}...")  # Print first 10 values for debugging
+
+        # Query the Pinecone index
+        results = index.query(
+            vector=query_embedding,
+            filter={"notes_id": notes_id},
+            top_k=top_k,
+            include_metadata=True
+        )
+        print(f"[DEBUG] Full query response: {results}")
+
+        # Handle empty results
+        if not results.get("matches", []):
+            print(f"[DEBUG] No matches found for notes_id={notes_id} and query='{query}'.")
+            return ""
+
+        # Extract the text from the metadata of the top-k matches
+        context_chunks = [match["metadata"]["text"] for match in results.get("matches", [])]
+        print(f"[DEBUG] Retrieved {len(context_chunks)} context chunks.")
+
+        # Combine the chunks into a single context string
+        context = "\n".join(context_chunks)
+        print(f"[DEBUG] Combined context: {context[:200]}...")  # Print first 200 characters for debugging
+
+        return context
+    except Exception as e:
+        print(f"[ERROR] Failed to retrieve context: {e}")
+        raise
+
+def delete_note_chunks(notes_id: str):
+    print(f"[DEBUG] Retrieving IDs for vectors with notes_id={notes_id}...")
+    try:
+        dummy_vector = [0.0] * 384  # Same dimension as your embeddings
+        results = index.query(
+            vector=dummy_vector,
+            filter={"notes_id": notes_id},
+            top_k=1000,
+            include_metadata=False
+        )
+
+        print(f"[DEBUG] Full query response: {results}")
+        vector_ids = [match["id"] for match in results.get("matches", [])]
+        print(f"[DEBUG] Retrieved vector IDs: {vector_ids}")
+
+        if not vector_ids:
+            print(f"[DEBUG] No vectors found for notes_id={notes_id}. Skipping deletion.")
+            return
+
+        print(f"[DEBUG] Deleting {len(vector_ids)} vectors for notes_id={notes_id}...")
+        index.delete(ids=vector_ids)
+        print("[DEBUG] Note chunks deleted successfully.")
+    except Exception as e:
+        print(f"[ERROR] Failed to delete note chunks: {e}")
+        raise
