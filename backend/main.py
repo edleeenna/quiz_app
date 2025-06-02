@@ -2,6 +2,7 @@ from typing import Optional
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import NotesFile, QuizResponse
+import uvicorn
 from ai_generator import generate_quiz_from_notes
 
 app = FastAPI()
@@ -36,7 +37,9 @@ async def generate_quiz_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 # If in future you want to add file upload functionality, save to db and then generate quiz
 #@app.post("/upload-notes", response_model=NotesFileResponse)
