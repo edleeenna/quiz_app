@@ -26,5 +26,6 @@ COPY --chown=app:app . .
 EXPOSE 8080
 
 # Start the FastAPI server
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+
 

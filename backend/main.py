@@ -37,10 +37,6 @@ async def generate_quiz_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
-
 # If in future you want to add file upload functionality, save to db and then generate quiz
 #@app.post("/upload-notes", response_model=NotesFileResponse)
 # async def upload_notes(file: UploadFile = File(...), name: str = Form(...), example_questions: str = Form(None)):
