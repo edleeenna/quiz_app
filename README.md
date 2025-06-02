@@ -4,7 +4,9 @@ A full-stack application that generates quizzes from your notes using AI.
 
 ## Deployment Information
 - Frontend deployed to vercel: https://quiz-app-rho-brown.vercel.app/
-- Backend deployed on Render.com (a free instance, so it will go to sleep with inactivity. Please note that this means AI generation will be slow as the backend reboots :smile: )
+- Backend deployed on Google Cloud.
+Notes:
+- Previous backend deployment was on Render.com but after implementing RAG, it could not run on free tier due to memory issues. 
 
 ## Features
 - Upload text files, DOCX or PDFs to extract content
@@ -21,7 +23,7 @@ A full-stack application that generates quizzes from your notes using AI.
 - AI Integration: Groq API for quiz generation (NOT to be confused with Grok :wink: )
 - RAG
   - Pinecone
--Docker
+- Docker
 
 ## Diagram
 ![image](https://github.com/user-attachments/assets/cbe1eb86-8259-42e5-b477-003e69648a5c)

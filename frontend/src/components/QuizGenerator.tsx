@@ -60,7 +60,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     }
 
     try {
-      const response = await fetch('https://quiz-app-zoxs.onrender.com/generate-quiz', {
+      const response = await fetch('https://quiz-app-286055422108.europe-west1.run.app/generate-quiz', {
         method: 'POST',
         body: formData,
       });
