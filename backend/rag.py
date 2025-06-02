@@ -30,10 +30,6 @@ index = pinecone_client.Index(index_name)
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
-# Use a small embedding model
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-
-
 def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
     print(f"[DEBUG] Storing note chunks for notes_id={notes_id}...")
 

@@ -1,29 +1,28 @@
-# Stage 1: Build dependencies
-FROM python:3.11-slim AS builder
-
-WORKDIR /app
-
-# System dependencies (optional, include only if needed)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --prefix=/install -r requirements.txt
-
-# Stage 2: Final runtime image
+# Use a slim Python image
 FROM python:3.11-slim
 
+# Avoid interactive prompts during installs
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies for sentence-transformers & FastAPI
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
 WORKDIR /app
 
-# Copy only installed dependencies and app files
-COPY --from=builder /install /usr/local
+# Copy requirements and install packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+# Copy your FastAPI app code
 COPY . .
 
+# Expose port
+EXPOSE 8000
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-
-# Start the FastAPI app
+# Run FastAPI with uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
