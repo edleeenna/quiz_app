@@ -1,0 +1,17 @@
+# render.yaml - Place in your project root
+services:
+  - type: web
+    name: quiz-app-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false  # You'll set this in Render dashboard
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_ENV
+        sync: false
+    healthCheckPath: /
+    plan: starter  # Free tier
+    # For paid tier, use: plan: standard
