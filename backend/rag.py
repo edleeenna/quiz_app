@@ -26,8 +26,16 @@ if index_name not in [i.name for i in pinecone_client.list_indexes()]:
 # Connect to the index
 index = pinecone_client.Index(index_name)
 
-# Use a small embedding model
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+# Lazy loading of embedding model
+_embedding_model = None
+
+def get_embedding_model():
+    global _embedding_model
+    if _embedding_model is None:
+        print("[DEBUG] Loading embedding model for the first time...")
+        _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        print("[DEBUG] Embedding model loaded successfully.")
+    return _embedding_model
 
 
 def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
@@ -36,6 +44,7 @@ def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
     chunks = [content[i:i+chunk_size] for i in range(0, len(content), chunk_size)]
     print(f"[DEBUG] Created {len(chunks)} chunks.")
 
+    embedding_model = get_embedding_model()
     embeddings = embedding_model.encode(chunks)  # shape: (n_chunks, 384)
     print(f"[DEBUG] Generated embeddings for chunks.")
 
@@ -60,6 +69,7 @@ def retrieve_context(notes_id: str, query: str, top_k: int = 5) -> str:
     print(f"[DEBUG] Retrieving context for notes_id={notes_id} and query='{query}'...")
     try:
         # Generate embedding for the query
+        embedding_model = get_embedding_model()
         query_embedding = embedding_model.encode([query])[0].tolist()
         print(f"[DEBUG] Query embedding: {query_embedding[:10]}...")  # Print first 10 values for debugging
 

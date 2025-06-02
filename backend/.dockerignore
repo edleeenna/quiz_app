@@ -4,6 +4,8 @@ frontend/
 .gitignore
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 node_modules/
 *.onnx
 *.pt
@@ -13,4 +15,23 @@ node_modules/
 tests/
 venv/
 .env
+.pytest_cache
+.coverage
+.DS_Store
+Thumbs.db
 
+# Docker files (don't copy into container)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Model cache (will be downloaded at runtime)
+model_cache/
+.cache/
+transformers_cache/
