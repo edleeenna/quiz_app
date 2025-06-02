@@ -1,43 +1,29 @@
-# 🏗️ Stage 1: Build with dependencies
+# Stage 1: Build dependencies
 FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-# Install system deps just for building
-RUN apt-get update && apt-get install -y \
-    build-essential \
+# System dependencies (optional, include only if needed)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python dependencies
 COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --prefix=/install -r requirements.txt
 
-# Install deps into a temporary directory
-RUN pip install --upgrade pip && \
-    pip install --prefix=/install --no-cache-dir -r requirements.txt
-
-# 🧼 Remove build tools to reduce size
-RUN apt-get purge -y build-essential && apt-get autoremove -y && apt-get clean
-
-# 🧊 Stage 2: Minimal runtime image
+# Stage 2: Final runtime image
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install runtime libs required by sentence-transformers
-RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    && rm -rf /var/lib/apt/lists/*
-
+# Copy only installed dependencies and app files
 COPY --from=builder /install /usr/local
-
-    # Debugging: Inspect files in context
-RUN echo "Files in context:" && ls -al || echo "No files found" && du -sh * || echo "No directories found"
-
-
-# Copy app code
 COPY . .
 
-EXPOSE 8000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Start the FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
