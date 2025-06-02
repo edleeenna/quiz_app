@@ -42,6 +42,11 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     - Do NOT include questions where the correct answer is not present in the options.
     - Ensure clarity, accuracy, and relevance to the notes.
     - Use the example questions to guide style and format. 
+    - Do NOT include any explanation, thinking, or reasoning before the questions.
+    - Only output the final formatted questions and answers in the specified structure.
+    - The answer line must include both the correct option letter and the full answer text (e.g., "Answer: b) Loss of data").
+
+
 
     Output Format:
     Q: ...
@@ -57,7 +62,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "mistral-saba-24b",
+        "model": "deepseek-r1-distill-llama-70b",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
         

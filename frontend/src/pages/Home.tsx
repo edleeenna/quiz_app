@@ -17,11 +17,11 @@ const Home = () => {
           <div className="absolute -top-6 left-[55%] -translate-x-1/2 w-24 h-24 bg-accent/10 rounded-full blur-3xl" />
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-fade-in relative">
-            Transform Your Study Notes Into Smart Quizzes
+            Transform Your Study Notes Into Quizzes
           </h1>
         </div>
         <p className="mt-8 text-xl text-muted-foreground max-w-2xl mx-auto">
-          Harness the power of AI to convert your study materials into personalized quizzes.
+          Harness the power of Gen AI to convert your study materials into personalized quizzes.
         </p>
         <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group relative overflow-hidden">
@@ -48,7 +48,7 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">Upload Notes</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Import your study materials in various formats including text, DOCX and PDF files or enter your notes manually. 
+              Import your study materials in various formats including text, DOCX and PDF files or enter your notes manually. Optionally add example questions
             </p>
           </div>
 
@@ -58,7 +58,7 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">AI Processing</h3>
             <p className="text-muted-foreground leading-relaxed">
-            Our AI analyzes your notes and creates relevant multiple-choice questions tailored to your content.
+            Our AI analyzes your notes and (hopefully) creates relevant multiple-choice questions tailored to your content.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ const Home = () => {
               Ready to Transform Your Learning?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join a singular student who is already using AI-powered quizzes to enhance their study experience.
+              Join a singular student (that's me) who is already using AI-powered quizzes to enhance their study experience.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group">
               <Link to="/app">
@@ -96,14 +96,9 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <footer className="border-t mt-20">
-        <div className="container px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              QuizNotes © {new Date().getFullYear()} - Transform your notes into quizzes
-            </p>
-       
-          </div>
+      <footer className="py-4 text-center text-sm text-muted-foreground border-t">
+        <div className="container">
+          QuizNotes © {new Date().getFullYear()} - Turn your notes into quizzes
         </div>
       </footer>
     </div>
