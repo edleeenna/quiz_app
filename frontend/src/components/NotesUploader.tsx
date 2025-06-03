@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, File, FileText, Upload } from 'lucide-react';
+import { Plus, File, FileText, Upload, Loader, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,11 +13,15 @@ interface NoteFile {
   name: string;
   content: string;
   exampleQuestions?: string;
+  isUploaded?: boolean; // Track if note is uploaded to RAG
+  uploadStatus?: 'idle' | 'uploading' | 'uploaded' | 'error';
 }
 
 interface NotesUploaderProps {
   addNote: (note: NoteFile) => void;
 }
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   const [dragActive, setDragActive] = useState(false);
@@ -25,6 +29,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   const [noteName, setNoteName] = useState('');
   const [exampleQuestions, setExampleQuestions] = useState('');
   const [activeTab, setActiveTab] = useState('upload');
+  const [isUploading, setIsUploading] = useState(false);
   
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedContent, setUploadedContent] = useState('');
@@ -74,35 +79,88 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       setUploadedFile(file);
       setUploadedContent(content);
       setActiveTab('examples');
-      toast.success("File uploaded successfully. Add example questions if needed.");
+      toast.success("File processed successfully. Add example questions if needed.");
     } catch (error) {
       toast.error("Failed to read file");
       console.error("Error reading file:", error);
     }
   };
 
-  const handleUploadedNoteSubmit = () => {
+  const uploadNoteToRAG = async (noteData: Omit<NoteFile, 'isUploaded' | 'uploadStatus'>) => {
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append("id", noteData.id);
+      formData.append("name", noteData.name);
+      formData.append("content", noteData.content);
+
+      const response = await fetch(`${API_BASE_URL}/upload-notes`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Upload successful:', result);
+      
+      return true;
+    } catch (error) {
+      console.error("Error uploading note to RAG:", error);
+      toast.error("Failed to upload note to server");
+      return false;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleUploadedNoteSubmit = async () => {
     if (!uploadedFile || !uploadedContent) {
       toast.error("Please upload a file first");
       return;
     }
     
-    const newNote = {
+    const noteData = {
       id: crypto.randomUUID(),
       name: uploadedFile.name,
       content: uploadedContent,
       exampleQuestions: uploadedExampleQuestions.trim() || undefined
     };
     
-    addNote(newNote);
-    setUploadedFile(null);
-    setUploadedContent('');
-    setUploadedExampleQuestions('');
-    setActiveTab('upload');
-    toast.success("Note with examples saved successfully!");
+    // Upload to RAG system first
+    const uploadSuccess = await uploadNoteToRAG(noteData);
+    
+    if (uploadSuccess) {
+      // Add to local state with upload status
+      const newNote: NoteFile = {
+        ...noteData,
+        isUploaded: true,
+        uploadStatus: 'uploaded'
+      };
+      
+      addNote(newNote);
+      setUploadedFile(null);
+      setUploadedContent('');
+      setUploadedExampleQuestions('');
+      setActiveTab('upload');
+      toast.success("Note uploaded and saved successfully!");
+    } else {
+      // Still add to local state but mark as not uploaded
+      const newNote: NoteFile = {
+        ...noteData,
+        isUploaded: false,
+        uploadStatus: 'error'
+      };
+      
+      addNote(newNote);
+      toast.error("Note saved locally but failed to upload to server. You can retry uploading later.");
+    }
   };
 
-  const handleManualNoteSubmit = () => {
+  const handleManualNoteSubmit = async () => {
     if (!noteContent.trim()) {
       toast.error("Note content cannot be empty");
       return;
@@ -113,18 +171,47 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       return;
     }
     
-    const newNote = {
+    const noteData = {
       id: crypto.randomUUID(),
       name: noteName.trim(),
       content: noteContent.trim(),
       exampleQuestions: exampleQuestions.trim() || undefined
     };
     
-    addNote(newNote);
-    setNoteContent('');
-    setNoteName('');
-    setExampleQuestions('');
-    toast.success("Note created successfully!");
+    // Upload to RAG system first
+    const uploadSuccess = await uploadNoteToRAG(noteData);
+    
+    if (uploadSuccess) {
+      // Add to local state with upload status
+      const newNote: NoteFile = {
+        ...noteData,
+        isUploaded: true,
+        uploadStatus: 'uploaded'
+      };
+      
+      addNote(newNote);
+      setNoteContent('');
+      setNoteName('');
+      setExampleQuestions('');
+      toast.success("Note uploaded and created successfully!");
+    } else {
+      // Still add to local state but mark as not uploaded
+      const newNote: NoteFile = {
+        ...noteData,
+        isUploaded: false,
+        uploadStatus: 'error'
+      };
+      
+      addNote(newNote);
+      toast.error("Note saved locally but failed to upload to server. You can retry uploading later.");
+    }
+  };
+
+  const getUploadStatusIcon = () => {
+    if (isUploading) {
+      return <Loader className="h-4 w-4 animate-spin text-yellow-500" />;
+    }
+    return null;
   };
 
   return (
@@ -147,15 +234,29 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
               Upload text files (TXT, MD, DOC).<br />
               Large files may not be able to be processed by AI.
             </p>
-            <Button variant="outline" className="relative group hover:border-accent hover:text-accent">
+            <Button 
+              variant="outline" 
+              className="relative group hover:border-accent hover:text-accent"
+              disabled={isUploading}
+            >
               <input
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
                 accept=".txt,.md,.doc,.docx"
                 onChange={handleFileChange}
+                disabled={isUploading}
               />
-              <Upload className="h-4 w-4 mr-2 transition-transform group-hover:scale-110" />
-              Browse Files
+              {isUploading ? (
+                <>
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2 transition-transform group-hover:scale-110" />
+                  Browse Files
+                </>
+              )}
             </Button>
           </div>
         </CardContent>
@@ -165,9 +266,23 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
               <FileText className="h-4 w-4 mr-2 text-primary" />
               <span className="text-sm truncate max-w-[180px]">{uploadedFile.name}</span>
             </div>
-            <Button size="sm" onClick={handleUploadedNoteSubmit} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Plus className="h-4 w-4 mr-2" />
-              Save Note
+            <Button 
+              size="sm" 
+              onClick={handleUploadedNoteSubmit} 
+              className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <>
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Save Note
+                </>
+              )}
             </Button>
           </CardFooter>
         )}
@@ -178,12 +293,18 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
         <CardHeader>
           {uploadedFile ? (
             <>
-              <CardTitle>Add Examples for Uploaded Note</CardTitle>
+              <CardTitle className="flex items-center">
+                Add Examples for Uploaded Note
+                {getUploadStatusIcon()}
+              </CardTitle>
               <CardDescription>Add example questions to guide the AI</CardDescription>
             </>
           ) : (
             <>
-              <CardTitle>Create Note</CardTitle>
+              <CardTitle className="flex items-center">
+                Create Note
+                {getUploadStatusIcon()}
+              </CardTitle>
               <CardDescription>Enter your notes manually and optionally include example questions</CardDescription>
             </>
           )}
@@ -209,6 +330,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   className="min-h-[200px] bg-background/50"
                   value={uploadedExampleQuestions}
                   onChange={(e) => setUploadedExampleQuestions(e.target.value)}
+                  disabled={isUploading}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Format: Write one question per line, followed by options (a, b, c, d) and indicate the correct answer.
@@ -218,8 +340,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-2 mb-4">
-                <TabsTrigger value="upload">Note Content</TabsTrigger>
-                <TabsTrigger value="examples">Example Questions</TabsTrigger>
+                <TabsTrigger value="upload" disabled={isUploading}>Note Content</TabsTrigger>
+                <TabsTrigger value="examples" disabled={isUploading}>Example Questions</TabsTrigger>
               </TabsList>
               <TabsContent value="upload" className="space-y-4">
                 <div className="space-y-2">
@@ -232,6 +354,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     value={noteName}
                     onChange={(e) => setNoteName(e.target.value)}
                     className="bg-background/50"
+                    disabled={isUploading}
                   />
                 </div>
                 <div className="space-y-2">
@@ -244,6 +367,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     className="min-h-[150px] bg-background/50"
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}
+                    disabled={isUploading}
                   />
                 </div>
               </TabsContent>
@@ -258,6 +382,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     className="min-h-[200px] bg-background/50"
                     value={exampleQuestions}
                     onChange={(e) => setExampleQuestions(e.target.value)}
+                    disabled={isUploading}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     Format: Write one question per line, followed by options (a, b, c, d) and indicate the correct answer. This will help guide the AI.
@@ -269,14 +394,40 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
         </CardContent>
         <CardFooter>
           {uploadedFile ? (
-            <Button onClick={handleUploadedNoteSubmit} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Plus className="h-4 w-4 mr-2" />
-              Save Note with Examples
+            <Button 
+              onClick={handleUploadedNoteSubmit} 
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <>
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading to Server...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Save Note with Examples
+                </>
+              )}
             </Button>
           ) : (
-            <Button onClick={handleManualNoteSubmit} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Note
+            <Button 
+              onClick={handleManualNoteSubmit} 
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <>
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading to Server...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Note
+                </>
+              )}
             </Button>
           )}
         </CardFooter>

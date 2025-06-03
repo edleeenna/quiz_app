@@ -12,6 +12,12 @@ class NotesFileResponse(BaseModel):
     content: str
     example_questions: Optional[List[str]] = None
 
+class NotesUploadResponse(BaseModel):
+    id: str
+    name: str
+    message: str
+    chunks_stored: bool
+
 class QuizQuestion(BaseModel):
     question: str
     options: List[str]

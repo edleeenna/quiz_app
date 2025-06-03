@@ -34,6 +34,8 @@ Notes:
 - Node.js (v15.0.0 or later)
 - Python 3.9+
 - Groq API key
+- Pinecone API key for RAG
+- Docker for deployment to google cloud
 
 ### Installation
 
@@ -80,6 +82,28 @@ cd frontend
 npm run dev
 ```
 3. Open your browser and navigate to http://localhost:8080
+
+### Running the app with Docker
+
+1. Build the container
+```sh
+docker build -t quiz-app .
+
+```
+2. Run
+
+```sh
+docker run -p 8000:8000 quiz-app-backend
+
+```
+
+Run with env variables
+
+```sh
+docker run -p 8000:8000 --env-file .env quiz-app-backend
+
+```
+
 
 ### API Endpoints
 ```

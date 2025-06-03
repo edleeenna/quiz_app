@@ -1,6 +1,6 @@
 from models import NotesFile, QuizQuestion
 from dotenv import load_dotenv
-from rag import store_note_chunks, retrieve_context, delete_note_chunks  # Import RAG functions
+from rag import  retrieve_context 
 import os, re, requests
 
 load_dotenv()
@@ -9,12 +9,7 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
    
-    delete_note_chunks(notes_file.id)
-
-    # Step 1: Store the notes in ChromaDB
-    store_note_chunks(notes_file.id, notes_file.content)
-
-    # Step 2: Retrieve context relevant to quiz generation
+    # Retrieve context relevant to quiz generation
 
     query = "Important information and facts suitable for quiz questions"
 
@@ -22,7 +17,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
 
     # Step 3: Construct the prompt using RAG context
     prompt = f"""
-    You are a quiz generator AI.
+    You are a helpful quiz master who likes to curate interesting & relevant quiz questions that help people learn
 
     Based on the following extracted context from notes:
     {context}
