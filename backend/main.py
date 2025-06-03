@@ -1,8 +1,8 @@
 from typing import Optional
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import NotesFile, QuizResponse
-import uvicorn
+from rag import delete_note_chunks, store_note_chunks
+from models import NotesFile, QuizResponse, NotesUploadResponse
 from ai_generator import generate_quiz_from_notes
 
 app = FastAPI()
@@ -37,19 +37,29 @@ async def generate_quiz_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# If in future you want to add file upload functionality, save to db and then generate quiz
-#@app.post("/upload-notes", response_model=NotesFileResponse)
-# async def upload_notes(file: UploadFile = File(...), name: str = Form(...), example_questions: str = Form(None)):
-#    try:
-#        content = await extract_text_from_file(file)
-#        notes_file = NotesFile(
-#            id=str(uuid.uuid4()),
-#            name=name,
-#            content=content,
-#            example_questions=example_questions.split('\n') if example_questions else None
-#        )
-#        #questions = generate_quiz_from_notes(notes_file)
-#        return NotesFileResponse(content=notes_file.content, example_questions=example_questions.split('\n') if example_questions else None)
-#
-#    except Exception as e:
-#        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/upload-notes", response_model=NotesUploadResponse)
+async def upload_notes_endpoint(
+    id: str = Form(...),
+    name: str = Form(...),
+    content: str = Form(...)
+):
+    """
+    Upload and store notes in the RAG system (Pinecone).
+    This endpoint handles the storage of notes for later quiz generation.
+    """
+    try:
+        # Delete any existing chunks for this notes_id (in case of re-upload)
+        delete_note_chunks(id)
+        
+        # Store the new note chunks in Pinecone
+        store_note_chunks(id, content)
+        
+        return NotesUploadResponse(
+            id=id,
+            name=name,
+            message=f"Notes '{name}' uploaded successfully",
+            chunks_stored=True
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload notes: {str(e)}")
