@@ -231,7 +231,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
             <FileText className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium mb-2">Drag & drop your notes</p>
             <p className="text-sm text-muted-foreground mb-4 text-center">
-              Upload text files (TXT, MD, DOC).<br />
+              Upload text files (TXT, MD, DOCX).<br />
               Large files may not be able to be processed by AI.
             </p>
             <Button 
@@ -242,7 +242,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
               <input
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
-                accept=".txt,.md,.doc,.docx"
+                accept=".txt,.md,.docx"
                 onChange={handleFileChange}
                 disabled={isUploading}
               />
