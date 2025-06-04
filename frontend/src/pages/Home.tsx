@@ -21,7 +21,7 @@ const Home = () => {
           </h1>
         </div>
         <p className="mt-8 text-xl text-muted-foreground max-w-2xl mx-auto">
-          Harness the power of Gen AI to convert your study materials into personalized quizzes.
+          Harness the power of Gen AI to convert your study materials into personalised quizzes.
         </p>
         <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group relative overflow-hidden">
