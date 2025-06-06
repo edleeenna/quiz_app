@@ -1,9 +1,11 @@
+import logging
 from typing import Optional
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from rag import delete_note_chunks, store_note_chunks
+from rag import delete_note_chunks, store_note_chunks, get_index
 from models import NotesFile, QuizResponse, NotesUploadResponse
 from ai_generator import generate_quiz_from_notes
+
 
 app = FastAPI()
 
@@ -14,6 +16,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+## Implement a lazy warmup to prevents the “cold start + garbage output” issue.
+@app.get("/warmup")
+async def warmup():
+    try:
+        index = get_index()
+        stats = index.describe_index_stats()
+        return {"status": "warm", "namespaces": list(stats.get("namespaces", {}).keys())}
+    except Exception as e:
+        logging.exception("Warmup failed:")
+        return {"status": "error", "details": str(e)}
 
 
 @app.post("/generate-quiz", response_model=QuizResponse)

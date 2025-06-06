@@ -2,8 +2,17 @@ import { BookOpen, FileText, ArrowRight, Brain, CheckCircle } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
+import { useEffect } from "react";
+
+
 
 const Home = () => {
+  // Implement a Lazy Warm up
+  useEffect(() => {
+    fetch(`http://127.0.0.1:8000/warmup`)
+      .then(() => console.log("Warmup triggered"))
+      .catch((err) => console.warn("Warmup failed", err));
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/50 to-muted">
       <Navbar />
@@ -25,7 +34,7 @@ const Home = () => {
         </p>
         <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group relative overflow-hidden">
-            <Link to="/app" className="relative z-10">
+            <Link to="/quiz-notes" className="relative z-10">
               <span className="relative z-10 flex items-center">
                 Start Learning
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -86,7 +95,7 @@ const Home = () => {
               Join a singular student (that's me) who is already using AI-powered quizzes to enhance their study experience.
             </p>
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group">
-              <Link to="/app">
+              <Link to="/quiz-notes">
                 Get Started Now
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>

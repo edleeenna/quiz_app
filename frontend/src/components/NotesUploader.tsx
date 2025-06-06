@@ -253,8 +253,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                 </>
               ) : (
                 <>
-                  <Upload className="h-4 w-4 mr-2 transition-transform group-hover:scale-110" />
-                  Browse Files
+                  <Upload className="h-4 w-4 mr-2 transition-transform group-hover:scale-110 text-black" />
+                  <span className="text-black">Browse Files</span>
                 </>
               )}
             </Button>
