@@ -11,7 +11,7 @@ interface NavbarProps {
 const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
   const location = useLocation();
   const isHome = location.pathname === "/";
-  const isApp = location.pathname === "/app";
+  const isApp = location.pathname === "/quiz-notes";
 
   return (
     <header className="w-full py-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -70,7 +70,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
           )}
 
           {isHome && (
-            <Link to="/app">
+            <Link to="/quiz-notes">
               <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
                 Get Started
               </Button>
