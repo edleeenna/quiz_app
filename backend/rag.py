@@ -2,7 +2,6 @@ import os
 import uuid
 import logging
 from pinecone import Pinecone, ServerlessSpec
-import numpy as np
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 

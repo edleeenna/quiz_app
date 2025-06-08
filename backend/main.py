@@ -5,6 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from rag import delete_note_chunks, store_note_chunks, get_index
 from models import NotesFile, QuizResponse, NotesUploadResponse
 from ai_generator import generate_quiz_from_notes
+from sentence_transformers import SentenceTransformer
+
+
 
 
 app = FastAPI()
@@ -21,9 +24,15 @@ app.add_middleware(
 @app.get("/warmup")
 async def warmup():
     try:
+        # Ensure Pinecone is ready
         index = get_index()
-        stats = index.describe_index_stats()
-        return {"status": "warm", "namespaces": list(stats.get("namespaces", {}).keys())}
+        index.describe_index_stats()
+        embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        # Force SentenceTransformer model to load
+        dummy_text = "This is a warmup chunk."
+        _ = embedding_model.encode([dummy_text])
+
+        return {"status": "warm"}
     except Exception as e:
         logging.exception("Warmup failed:")
         return {"status": "error", "details": str(e)}
