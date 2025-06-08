@@ -60,7 +60,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
     }
 
     try {
-      const response = await fetch('https://quiz-app-286055422108.europe-west1.run.app/generate-quiz', {
+      const response = await fetch('https://quiz-app-gs-c0g.fly.dev/generate-quiz', {
         method: 'POST',
         body: formData,
       });

@@ -4,9 +4,8 @@ A full-stack application that generates quizzes from your notes using AI.
 
 ## Deployment Information
 - Frontend deployed to vercel: https://quiz-notes-01.vercel.app/
-- Backend deployed on Google Cloud.
-Notes:
-- Previous backend deployment was on Render.com but after implementing RAG, it could not run on free tier due to memory issues. 
+- Backend deployed on Fly.io.
+
 
 ## Features
 - Upload text files, DOCX or PDFs to extract content

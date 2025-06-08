@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { updateQuizAttempt } from '@/lib/quiz-storage';
 import { QuizQuestion } from '@/types';
 import { toast } from 'sonner';
+import { get } from 'http';
 
 interface QuizRunnerProps {
   questions: QuizQuestion[];
@@ -54,7 +55,7 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
     }
   };
 
-  const getScore = () => {
+  const getScore = React.useCallback(() => {
     let correct = 0;
     questions.forEach(q => {
       if (userAnswers[q.id] === q.correctAnswer) {
@@ -66,14 +67,14 @@ const QuizRunner = ({ questions, restartQuiz, quizId }: QuizRunnerProps) => {
       total: questions.length,
       percentage: Math.round((correct / questions.length) * 100)
     };
-  };
+  }, [questions, userAnswers]);
 
   useEffect(() => {
     if (quizCompleted && quizId) {
       const score = getScore();
       updateQuizAttempt(quizId, score.percentage);
     }
-  }, [quizCompleted, quizId]);
+  }, [quizCompleted, quizId, getScore]);
 
   const handleShowExplanation = () => {
     setShowExplanation(true);

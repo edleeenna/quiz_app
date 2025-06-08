@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Home = () => {
   // Implement a Lazy Warm up
   useEffect(() => {
-    fetch(`https://quiz-app-286055422108.europe-west1.run.app/warmup`)
+    fetch(`https://quiz-app-gs-c0g.fly.dev/warmup`)
       .then(() => console.log("Warmup triggered"))
       .catch((err) => console.warn("Warmup failed", err));
   }, []);

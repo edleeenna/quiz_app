@@ -21,7 +21,7 @@ interface NotesUploaderProps {
   addNote: (note: NoteFile) => void;
 }
 
-const API_BASE_URL = 'https://quiz-app-286055422108.europe-west1.run.app';
+const API_BASE_URL = 'https://quiz-app-gs-c0g.fly.dev';
 
 const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   const [dragActive, setDragActive] = useState(false);
