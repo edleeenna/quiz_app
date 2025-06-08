@@ -126,7 +126,9 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
           Generate Quiz
         </CardTitle>
         <CardDescription>
-          Create a multiple-choice quiz from your note
+          Create a multiple-choice quiz from your note. 
+          <br />
+          <p><strong>**WARNING** The app may take a minute to warm up after a period of inactivity due to free tier limitations. This can result in no questions generated or garbage/irrelevant output. Please wait a moment and try again.</strong></p>
           {selectedNote.exampleQuestions ? " (includes example questions)" : ""}
         </CardDescription>
       </CardHeader>
