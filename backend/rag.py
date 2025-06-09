@@ -1,8 +1,7 @@
 import os
 import uuid
 import logging
-from pinecone import Pinecone, ServerlessSpec
-from sentence_transformers import SentenceTransformer
+from pinecone import Pinecone, ServerlessSpec, EmbeddingsList
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,10 +9,10 @@ load_dotenv()
 # Global singletons
 pinecone_client = None
 pinecone_index = None
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-INDEX_NAME = "quiz-notes"
-DIMENSION = 384
+INDEX_NAME = "llama-text-embed-v2-index"
+DIMENSION = 1024
+EMBEDDING_MODEL = "llama-text-embed-v2"  # or your preferred model
 
 
 def get_index():
@@ -41,16 +40,37 @@ def get_index():
     return pinecone_index
 
 
+def generate_embeddings(texts: list[str]) -> list[list[float]]:
+    """Generate embeddings using Pinecone's inference API"""
+    try:
+        # Use the inference plugin for embeddings
+        response = pinecone_client.inference.embed(
+            model=EMBEDDING_MODEL,
+            inputs=texts,
+            parameters={
+                "input_type": "passage",
+                "truncate": "END"
+            }
+        )
+        
+        # Extract the embedding values from the response
+        return [embedding.values for embedding in response.data]
+        
+    except Exception as e:
+        logging.error(f"Embedding generation failed: {e}")
+        raise
+
+
 def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
     logging.debug(f"Storing note chunks for notes_id={notes_id}")
     chunks = [content[i:i+chunk_size] for i in range(0, len(content), chunk_size)]
-    embeddings = embedding_model.encode(chunks)
+    embeddings = generate_embeddings(chunks)
 
     vectors = []
     for emb, chunk in zip(embeddings, chunks):
         vectors.append((
             f"{notes_id}-{uuid.uuid4()}",
-            emb.tolist(),
+            emb,
             {"notes_id": notes_id, "text": chunk}
         ))
 
@@ -66,7 +86,7 @@ def store_note_chunks(notes_id: str, content: str, chunk_size: int = 500):
 def retrieve_context(notes_id: str, query: str, top_k: int = 5) -> str:
     logging.debug(f"Retrieving context for notes_id={notes_id}")
     try:
-        query_embedding = embedding_model.encode([query])[0].tolist()
+        query_embedding = generate_embeddings([query])[0]
         index = get_index()
 
         results = index.query(

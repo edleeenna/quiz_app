@@ -2,13 +2,9 @@ import logging
 from typing import Optional
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from rag import delete_note_chunks, store_note_chunks, get_index
+from rag import delete_note_chunks, store_note_chunks
 from models import NotesFile, QuizResponse, NotesUploadResponse
 from ai_generator import generate_quiz_from_notes
-from sentence_transformers import SentenceTransformer
-
-
-
 
 app = FastAPI()
 
@@ -20,30 +16,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-## Implement a lazy warmup to prevents the “cold start + garbage output” issue.
-@app.get("/warmup")
-async def warmup():
-    try:
-        # Ensure Pinecone is ready
-        index = get_index()
-        index.describe_index_stats()
-        embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        # Force SentenceTransformer model to load
-        dummy_text = "This is a warmup chunk."
-        _ = embedding_model.encode([dummy_text])
-
-        return {"status": "warm"}
-    except Exception as e:
-        logging.exception("Warmup failed:")
-        return {"status": "error", "details": str(e)}
-
 
 @app.post("/generate-quiz", response_model=QuizResponse)
 async def generate_quiz_endpoint(
     id: str = Form(...),
     name: str = Form(...),
     content: str = Form(...),
-    num_questions: str = Form(...),
+    num_questions: int = Form(...),
     example_questions: Optional[str] = Form(None)
 ):
     try:

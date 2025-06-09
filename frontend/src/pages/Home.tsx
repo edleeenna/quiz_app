@@ -2,17 +2,8 @@ import { BookOpen, FileText, ArrowRight, Brain, CheckCircle } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
-import { useEffect } from "react";
-
-
 
 const Home = () => {
-  // Implement a Lazy Warm up
-  useEffect(() => {
-    fetch(`https://quiz-app-gs-c0g.fly.dev/warmup`)
-      .then(() => console.log("Warmup triggered"))
-      .catch((err) => console.warn("Warmup failed", err));
-  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/50 to-muted">
       <Navbar />

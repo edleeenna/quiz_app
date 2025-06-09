@@ -1,9 +1,9 @@
 fastapi
 uvicorn
 pinecone
-sentence-transformers==2.2.2
 scikit-learn
-dotenv
+python-dotenv
 huggingface_hub<0.14
 python-multipart
 uvicorn
+dotenv

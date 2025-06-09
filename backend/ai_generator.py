@@ -11,7 +11,9 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
    
     # Retrieve context relevant to quiz generation
 
-    query = "Important information and facts suitable for quiz questions"
+    query = "Key facts or quiz relevant information about " + notes_file.name
+
+    print(query)
 
     context = retrieve_context(notes_file.id, query)
 
@@ -19,16 +21,15 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     prompt = f"""
     You are a helpful quiz master who likes to curate interesting & relevant quiz questions that help people learn
 
-    Based on the following extracted context from notes:
+    - Generate exactly {notes_file.num_questions} multiple-choice quiz questions based on the context provided below.
     {context}
-
-    Generate {notes_file.num_questions} multiple-choice quiz questions.
 
     Example Questions:
     {notes_file.example_questions or 'None'}
 
     Instructions:
     - Return exactly {notes_file.num_questions} questions.
+    - STOP immediately after the last question.
     - Each question must have 4 answer options labeled a), b), c), and d).
     - Randomize the order of the options.
     - The correct answer MUST be **exactly one of the 4 options**.
@@ -50,6 +51,9 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     c) ...
     d) ...
     Answer: ...
+
+    After writing {notes_file.num_questions} questions, write EndOfQuestions.
+
     """
 
     headers = {
@@ -57,25 +61,30 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "deepseek-r1-distill-llama-70b",
+        "model": "mistral-saba-24b",
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.7,
+        "temperature": 0.3,
+        "stop": ["EndOfQuestions"],
+        "max_tokens": 2000,
         
     }
 
     response = requests.post(GROQ_API_URL, json=payload, headers=headers)
     response.raise_for_status()
     content = response.json()["choices"][0]["message"]["content"]
+    print(content)
+    return parse_questions(content, notes_file.num_questions)
 
-    return parse_questions(content)
 
-
-def parse_questions(text: str) -> list[QuizQuestion]:
+def parse_questions(text: str, num_questions: int) -> list[QuizQuestion]:
     print("Parsing questions...")
     blocks = text.strip().split("Q:")
     questions = []
 
     for i, block in enumerate(blocks[1:], start=1):
+        if len(questions) >= num_questions:
+            break  # ⛔ Hard stop at required number
+
         try:
             lines = block.strip().split("\n")
             lines = [line.strip() for line in lines if line.strip()]
@@ -118,6 +127,6 @@ def parse_questions(text: str) -> list[QuizQuestion]:
             continue  # Skip bad blocks
 
     print(f"Parsed {len(questions)} questions.")
-    return questions
+    return questions[:num_questions]
 
 
