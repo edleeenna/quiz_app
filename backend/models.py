@@ -5,7 +5,7 @@ class NotesFile(BaseModel):
     id: str
     name: str
     content: str
-    num_questions: str
+    num_questions: int
     example_questions: str | None = None
 
 class NotesFileResponse(BaseModel):
