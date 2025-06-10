@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, File, FileText, Upload, Loader, CheckCircle, AlertCircle, Sparkles, BookOpen } from 'lucide-react';
+import { Plus, File, FileText, Upload, Loader, CheckCircle, AlertCircle, Sparkles, BookOpen, ArrowRight, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import mammoth from 'mammoth';
 
@@ -79,7 +80,13 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       setUploadedFile(file);
       setUploadedContent(content);
       setActiveTab('examples');
-      toast.success("File processed successfully! Add example questions if needed.");
+      toast.success("File processed successfully! Now add example questions to improve quiz quality.", {
+        duration: 5000,
+        action: {
+          label: "Add Examples",
+          onClick: () => setActiveTab('examples')
+        }
+      });
     } catch (error) {
       toast.error("Failed to read file");
       console.error("Error reading file:", error);
@@ -201,6 +208,10 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
     }
   };
 
+  const handleSkipExamples = () => {
+    handleUploadedNoteSubmit();
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -299,105 +310,195 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     <p className="text-xs text-muted-foreground">File processed successfully</p>
                   </div>
                 </div>
-                <Button 
-                  size="sm" 
-                  onClick={handleUploadedNoteSubmit}
-                  disabled={isUploading}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                >
-                  {isUploading ? (
-                    <>
-                      <Loader className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Save Note
-                    </>
-                  )}
-                </Button>
+                <ArrowRight className="h-5 w-5 text-blue-500 animate-bounce-gentle" />
               </div>
             </CardFooter>
           )}
         </Card>
 
-        {/* Manual Entry Card */}
-        <Card className="glass-card animate-scale-in" style={{ animationDelay: '0.1s' }}>
+        {/* Manual Entry or Example Questions Card */}
+        <Card className={`glass-card animate-scale-in transition-all duration-300 ${
+          uploadedFile ? 'ring-2 ring-blue-200 dark:ring-blue-800 shadow-lg' : ''
+        }`} style={{ animationDelay: '0.1s' }}>
           <CardHeader>
-            <div className="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4">
-              <BookOpen className="h-8 w-8 text-white" />
-            </div>
-            <CardTitle className="text-xl text-center">Create Manually</CardTitle>
-            <CardDescription className="text-center">
-              Enter your notes and optional example questions
-            </CardDescription>
+            {uploadedFile ? (
+              <>
+                <div className="mx-auto w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mb-4 animate-bounce-gentle">
+                  <Lightbulb className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-center flex items-center justify-center space-x-2">
+                  <span>🎯 Boost Quiz Quality!</span>
+                </CardTitle>
+                <CardDescription className="text-center">
+                  <strong>Add example questions to guide the AI</strong> and get better, more relevant quiz questions tailored to your style.
+                </CardDescription>
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+                  <div className="flex items-start space-x-3">
+                    <Lightbulb className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">
+                        💡 Pro Tip: Example questions dramatically improve AI output!
+                      </p>
+                      <p className="text-yellow-700 dark:text-yellow-300">
+                        Show the AI your preferred question format and difficulty level for much better results.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4">
+                  <BookOpen className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-center">Create Manually</CardTitle>
+                <CardDescription className="text-center">
+                  Enter your notes and optional example questions
+                </CardDescription>
+              </>
+            )}
           </CardHeader>
           
           <CardContent className="space-y-6">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid grid-cols-2 mb-6 bg-muted/50">
-                <TabsTrigger value="upload" disabled={isUploading} className="data-[state=active]:bg-background">
-                  Content
-                </TabsTrigger>
-                <TabsTrigger value="examples" disabled={isUploading} className="data-[state=active]:bg-background">
-                  Examples
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="upload" className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="note-name" className="text-sm font-medium">
-                    Note Title
-                  </label>
-                  <Input
-                    id="note-name"
-                    placeholder="e.g., Biology Chapter 5 - Cell Structure"
-                    value={noteName}
-                    onChange={(e) => setNoteName(e.target.value)}
-                    className="bg-background/50 border-border/50 focus:border-blue-300"
-                    disabled={isUploading}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="note-content" className="text-sm font-medium">
-                    Note Content
-                  </label>
-                  <Textarea
-                    id="note-content"
-                    placeholder="Enter your study notes here..."
-                    className="min-h-[200px] bg-background/50 border-border/50 focus:border-blue-300 resize-none"
-                    value={noteContent}
-                    onChange={(e) => setNoteContent(e.target.value)}
-                    disabled={isUploading}
-                  />
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="examples" className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="example-questions" className="text-sm font-medium">
-                    Example Questions (Optional)
-                  </label>
-                  <Textarea
-                    id="example-questions"
-                    placeholder={`Guide the AI with example questions:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria (correct)\nc) Ribosome\nd) Golgi apparatus`}
-                    className="min-h-[200px] bg-background/50 border-border/50 focus:border-blue-300 resize-none"
-                    value={uploadedFile ? uploadedExampleQuestions : exampleQuestions}
-                    onChange={(e) => uploadedFile ? setUploadedExampleQuestions(e.target.value) : setExampleQuestions(e.target.value)}
-                    disabled={isUploading}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Provide example questions to help the AI understand your preferred format and style.
+            {uploadedFile ? (
+              // Example Questions for Uploaded File
+              <div className="space-y-4">
+                <div className="bg-muted/20 rounded-lg p-4 border">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="font-medium text-sm">File: {uploadedFile.name}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground line-clamp-2">
+                    {uploadedContent.length > 100 
+                      ? `${uploadedContent.substring(0, 100)}...` 
+                      : uploadedContent}
                   </p>
                 </div>
-              </TabsContent>
-            </Tabs>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="uploaded-example-questions" className="text-sm font-medium flex items-center space-x-2">
+                      <Sparkles className="h-4 w-4 text-blue-500" />
+                      <span>Example Questions</span>
+                    </label>
+                    <Badge variant="secondary" className="text-xs">
+                      Recommended
+                    </Badge>
+                  </div>
+                  
+                  <Textarea
+                    id="uploaded-example-questions"
+                    placeholder={`💡 Add example questions to guide the AI:\n\nQ: What is the main function of mitochondria?\na) Protein synthesis\nb) Energy production (correct)\nc) DNA storage\nd) Waste removal\n\nQ: Which organelle controls cell activities?\na) Nucleus (correct)\nb) Cytoplasm\nc) Cell membrane\nd) Vacuole`}
+                    className="min-h-[200px] bg-background/50 border-border/50 focus:border-blue-300 resize-none"
+                    value={uploadedExampleQuestions}
+                    onChange={(e) => setUploadedExampleQuestions(e.target.value)}
+                    disabled={isUploading}
+                  />
+                  
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+                    <p className="text-xs text-blue-700 dark:text-blue-300">
+                      <strong>Format tip:</strong> Write questions with 4 options (a, b, c, d) and mark the correct answer. 
+                      This helps the AI understand your preferred style and difficulty level.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Manual Entry Tabs
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid grid-cols-2 mb-6 bg-muted/50">
+                  <TabsTrigger value="upload" disabled={isUploading} className="data-[state=active]:bg-background">
+                    Content
+                  </TabsTrigger>
+                  <TabsTrigger value="examples" disabled={isUploading} className="data-[state=active]:bg-background">
+                    Examples
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="upload" className="space-y-4">
+                  <div className="space-y-2">
+                    <label htmlFor="note-name" className="text-sm font-medium">
+                      Note Title
+                    </label>
+                    <Input
+                      id="note-name"
+                      placeholder="e.g., Biology Chapter 5 - Cell Structure"
+                      value={noteName}
+                      onChange={(e) => setNoteName(e.target.value)}
+                      className="bg-background/50 border-border/50 focus:border-blue-300"
+                      disabled={isUploading}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="note-content" className="text-sm font-medium">
+                      Note Content
+                    </label>
+                    <Textarea
+                      id="note-content"
+                      placeholder="Enter your study notes here..."
+                      className="min-h-[200px] bg-background/50 border-border/50 focus:border-blue-300 resize-none"
+                      value={noteContent}
+                      onChange={(e) => setNoteContent(e.target.value)}
+                      disabled={isUploading}
+                    />
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="examples" className="space-y-4">
+                  <div className="space-y-2">
+                    <label htmlFor="example-questions" className="text-sm font-medium flex items-center space-x-2">
+                      <Sparkles className="h-4 w-4 text-purple-500" />
+                      <span>Example Questions (Optional)</span>
+                    </label>
+                    <Textarea
+                      id="example-questions"
+                      placeholder={`Guide the AI with example questions:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria (correct)\nc) Ribosome\nd) Golgi apparatus`}
+                      className="min-h-[200px] bg-background/50 border-border/50 focus:border-purple-300 resize-none"
+                      value={exampleQuestions}
+                      onChange={(e) => setExampleQuestions(e.target.value)}
+                      disabled={isUploading}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Provide example questions to help the AI understand your preferred format and style.
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            )}
           </CardContent>
           
-          <CardFooter>
-            {!uploadedFile && (
+          <CardFooter className="space-y-3">
+            {uploadedFile ? (
+              <div className="w-full space-y-3">
+                <Button 
+                  onClick={handleUploadedNoteSubmit} 
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+                  disabled={isUploading}
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader className="h-4 w-4 mr-2 animate-spin" />
+                      Uploading to Server...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Save Note {uploadedExampleQuestions.trim() ? 'with Examples' : ''}
+                    </>
+                  )}
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  onClick={handleSkipExamples}
+                  className="w-full text-muted-foreground hover:text-foreground"
+                  disabled={isUploading}
+                >
+                  Skip Examples & Save Note
+                </Button>
+              </div>
+            ) : (
               <Button 
                 onClick={handleManualNoteSubmit} 
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
