@@ -78,7 +78,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   
       setUploadedFile(file);
       setUploadedContent(content);
-      toast.success("File processed successfully! You can now add example questions or save directly.");
+      setActiveTab('examples');
+      toast.success("File processed successfully! Add example questions if needed.");
     } catch (error) {
       toast.error("Failed to read file");
       console.error("Error reading file:", error);
@@ -86,6 +87,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
   };
 
   const uploadNoteToRAG = async (noteData: Omit<NoteFile, 'isUploaded' | 'uploadStatus'>) => {
+    setIsUploading(true);
+    
     try {
       const formData = new FormData();
       formData.append("id", noteData.id);
@@ -109,6 +112,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       console.error("Error uploading note to RAG:", error);
       toast.error("Failed to upload note to server");
       return false;
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -117,8 +122,6 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       toast.error("Please upload a file first");
       return;
     }
-    
-    setIsUploading(true);
     
     const noteData = {
       id: crypto.randomUUID(),
@@ -137,13 +140,10 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       };
       
       addNote(newNote);
-      
-      // Reset form
       setUploadedFile(null);
       setUploadedContent('');
       setUploadedExampleQuestions('');
       setActiveTab('upload');
-      
       toast.success("Note uploaded and saved successfully!");
     } else {
       const newNote: NoteFile = {
@@ -155,8 +155,6 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       addNote(newNote);
       toast.error("Note saved locally but failed to upload to server. You can retry uploading later.");
     }
-    
-    setIsUploading(false);
   };
 
   const handleManualNoteSubmit = async () => {
@@ -169,8 +167,6 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       toast.error("Note name cannot be empty");
       return;
     }
-    
-    setIsUploading(true);
     
     const noteData = {
       id: crypto.randomUUID(),
@@ -189,12 +185,9 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       };
       
       addNote(newNote);
-      
-      // Reset form
       setNoteContent('');
       setNoteName('');
       setExampleQuestions('');
-      
       toast.success("Note uploaded and created successfully!");
     } else {
       const newNote: NoteFile = {
@@ -206,8 +199,6 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
       addNote(newNote);
       toast.error("Note saved locally but failed to upload to server. You can retry uploading later.");
     }
-    
-    setIsUploading(false);
   };
 
   return (
@@ -297,7 +288,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-slate-900">{uploadedFile.name}</p>
-                    <p className="text-sm text-slate-500">Ready to save</p>
+                    <p className="text-sm text-slate-500">Ready to process</p>
                   </div>
                 </div>
                 <Button 
@@ -308,7 +299,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                   {isUploading ? (
                     <>
                       <Loader className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
+                      Uploading...
                     </>
                   ) : (
                     <>
@@ -383,8 +374,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     id="example-questions"
                     placeholder={`Add example questions to guide AI generation:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria (correct)\nc) Ribosome\nd) Golgi apparatus`}
                     className="min-h-[200px] border-slate-200 focus:border-blue-300 focus:ring-blue-200 resize-none"
-                    value={exampleQuestions}
-                    onChange={(e) => setExampleQuestions(e.target.value)}
+                    value={uploadedFile ? uploadedExampleQuestions : exampleQuestions}
+                    onChange={(e) => uploadedFile ? setUploadedExampleQuestions(e.target.value) : setExampleQuestions(e.target.value)}
                     disabled={isUploading}
                   />
                   <p className="text-xs text-slate-500">
@@ -395,82 +386,29 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
             </Tabs>
           </CardContent>
           
-          <CardFooter className="relative z-10">
-            <Button 
-              onClick={handleManualNoteSubmit} 
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              disabled={isUploading || !noteContent.trim() || !noteName.trim()}
-            >
-              {isUploading ? (
-                <>
-                  <Loader className="h-4 w-4 mr-2 animate-spin" />
-                  Creating Note...
-                </>
-              ) : (
-                <>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Note
-                </>
-              )}
-            </Button>
-          </CardFooter>
+          {!uploadedFile && (
+            <CardFooter className="relative z-10">
+              <Button 
+                onClick={handleManualNoteSubmit} 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                disabled={isUploading}
+              >
+                {isUploading ? (
+                  <>
+                    <Loader className="h-4 w-4 mr-2 animate-spin" />
+                    Creating Note...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Note
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          )}
         </Card>
       </div>
-
-      {/* File Content Preview and Example Questions for Uploaded Files */}
-      {uploadedFile && uploadedContent && (
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* File Content Preview */}
-          <Card className="border border-slate-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-600" />
-                File Content Preview: {uploadedFile.name}
-              </CardTitle>
-              <CardDescription>
-                Review the extracted content from your uploaded file
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-slate-50 rounded-lg p-4 max-h-64 overflow-y-auto">
-                <pre className="text-sm text-slate-700 whitespace-pre-wrap">
-                  {uploadedContent.length > 1000 
-                    ? `${uploadedContent.substring(0, 1000)}...\n\n[Content truncated - ${uploadedContent.length} total characters]`
-                    : uploadedContent}
-                </pre>
-              </div>
-              <div className="mt-3 text-sm text-slate-500">
-                {uploadedContent.length} characters extracted
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Example Questions for Uploaded File */}
-          <Card className="border border-slate-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
-                Add Example Questions (Optional)
-              </CardTitle>
-              <CardDescription>
-                Help the AI generate better questions by providing examples for your uploaded content
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                placeholder={`Add example questions to guide AI generation:\n\nQ: What is the main topic of this content?\na) Option A\nb) Option B (correct)\nc) Option C\nd) Option D`}
-                className="min-h-[150px] border-slate-200 focus:border-blue-300 focus:ring-blue-200 resize-none"
-                value={uploadedExampleQuestions}
-                onChange={(e) => setUploadedExampleQuestions(e.target.value)}
-                disabled={isUploading}
-              />
-              <p className="text-xs text-slate-500 mt-2">
-                These examples will help the AI understand your preferred question format and style
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      )}
     </div>
   );
 };
