@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { BookOpen, Loader, ArrowRight, CheckCircle, FileInput, Sparkles, Zap, Settings } from 'lucide-react';
+import { BookOpen, Loader, ArrowRight, CheckCircle, FileInput } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
 interface NoteFile {
@@ -104,201 +103,124 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
 
   if (!selectedNote) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <Card className="border-2 border-dashed border-slate-200 bg-slate-50/50">
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-6">
-              <BookOpen className="h-8 w-8 text-blue-600" />
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-700 mb-3">No note selected</h3>
-            <p className="text-slate-500 mb-6 max-w-md">
-              Choose a note from your collection to generate an AI-powered quiz
-            </p>
-            <Button variant="outline" disabled className="pointer-events-none">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Generate Quiz
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="border border-dashed border-border/50 bg-card/50 backdrop-blur-sm">
+        <CardContent className="p-6 flex flex-col items-center justify-center min-h-[300px] text-center">
+          <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">No note selected</h3>
+          <p className="text-muted-foreground mb-4">
+            Please select a note to generate a quiz
+          </p>
+          <Button variant="outline" disabled>
+            Generate Quiz
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-      <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Generate AI Quiz
-        </h2>
-        <p className="text-slate-600">
-          Transform your notes into an interactive learning experience
-        </p>
-      </div>
-
-      <Card className="relative overflow-hidden border border-slate-200 shadow-lg">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50" />
-        
-        <CardHeader className="relative z-10">
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-blue-600" />
-            Quiz Configuration
-          </CardTitle>
-          <CardDescription>
-            Customize your quiz settings and review your selected note
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent className="relative z-10 space-y-6">
-          {/* Selected Note Display */}
-          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-semibold text-slate-900 truncate">{selectedNote.name}</h3>
-                  {selectedNote.exampleQuestions && (
-                    <Badge variant="secondary" className="flex-shrink-0">
-                      <FileInput className="h-3 w-3 mr-1" />
-                      Examples
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-sm text-slate-600 line-clamp-2">
-                  {selectedNote.content.length > 150 
-                    ? `${selectedNote.content.substring(0, 150)}...` 
-                    : selectedNote.content}
-                </p>
-                <div className="mt-2 text-xs text-slate-500">
-                  {selectedNote.content.length} characters
-                </div>
-              </div>
-            </div>
+    <Card className="animate-fade-in bg-card/50 backdrop-blur-sm border-border/50">
+      <CardHeader>
+        <CardTitle className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Generate Quiz
+        </CardTitle>
+        <CardDescription>
+          Create a multiple-choice quiz from your note. 
+          <br />
+          <p><strong>**WARNING** The app may take a minute to warm up after a period of inactivity due to free tier limitations. This can result in no questions generated or garbage/irrelevant output. Please wait a moment and try again.</strong></p>
+          {selectedNote.exampleQuestions ? " (includes example questions)" : ""}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg border border-border/50">
+          <BookOpen className="h-8 w-8 text-primary flex-shrink-0" />
+          <div className="flex-1 overflow-hidden">
+            <h3 className="font-medium truncate">{selectedNote.name}</h3>
+            <p className="text-sm text-muted-foreground truncate">
+              {selectedNote.content.length > 80 
+                ? `${selectedNote.content.substring(0, 80)}...` 
+                : selectedNote.content}
+            </p>
           </div>
+        </div>
 
-          {/* Quiz Settings */}
-          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <Settings className="h-5 w-5 text-slate-600" />
-              <h4 className="font-medium text-slate-900">Quiz Settings</h4>
-            </div>
-            
-            <div className="space-y-3">
-              <label htmlFor="question-count" className="block text-sm font-medium text-slate-700">
-                Number of Questions
-              </label>
-              <select
-                id="question-count"
-                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50 transition-colors"
-                value={numQuestions}
-                onChange={(e) => setNumQuestions(Number(e.target.value))}
-              >
-                {[5, 10, 15, 20, 25].map((count) => (
-                  <option key={count} value={count}>
-                    {count} questions
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Example Questions Preview */}
-          {selectedNote.exampleQuestions && (
-            <Collapsible 
-              open={isExamplesOpen} 
-              onOpenChange={setIsExamplesOpen}
-              className="bg-white rounded-xl border border-slate-200 shadow-sm"
-            >
-              <CollapsibleTrigger asChild>
-                <div className="flex items-center justify-between cursor-pointer p-6 hover:bg-slate-50 transition-colors rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <FileInput className="h-5 w-5 text-purple-600" />
-                    <span className="font-medium text-slate-900">Example Questions</span>
-                    <Badge variant="outline" className="ml-2">Preview</Badge>
-                  </div>
-                  <span className="text-sm text-slate-500">
-                    {isExamplesOpen ? "Hide" : "Show"}
-                  </span>
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="px-6 pb-6">
-                <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto">
-                  <pre className="text-sm text-slate-700 whitespace-pre-wrap font-mono">
-                    {selectedNote.exampleQuestions}
-                  </pre>
-                </div>
-                <p className="text-xs text-slate-500 mt-3">
-                  These examples will guide the AI to generate questions in a similar style and format.
-                </p>
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-
-          {/* Loading State */}
-          {loading && (
-            <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium">Generating quiz</span>
-                  </div>
-                  <span className="text-slate-600">{progress}%</span>
-                </div>
-                <Progress value={progress} className="h-2" />
-                <div className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                  <Loader className="h-4 w-4 animate-spin" />
-                  <span>
-                    {selectedNote.exampleQuestions 
-                      ? "Analyzing content and examples to create personalized questions..."
-                      : "Analyzing content and generating intelligent questions..."}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Warning Notice */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <div className="flex gap-3">
-              <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-amber-600 text-xs font-bold">!</span>
-              </div>
-              <div className="text-sm">
-                <p className="font-medium text-amber-800 mb-1">Please Note</p>
-                <p className="text-amber-700">
-                  The app may take a moment to warm up after periods of inactivity due to free tier limitations. 
-                  If no questions are generated, please wait and try again.
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-        
-        <CardFooter className="relative z-10 bg-slate-50/50 border-t">
-          <Button 
-            onClick={generateQuiz} 
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 py-3"
-            size="lg"
+        <div className="space-y-2">
+          <label htmlFor="question-count" className="text-sm font-medium">Number of Questions</label>
+          <select
+            id="question-count"
+            className="w-full border rounded-md px-3 py-2 text-sm bg-background"
+            value={numQuestions}
+            onChange={(e) => setNumQuestions(Number(e.target.value))}
           >
-            {loading ? (
-              <>
-                <Loader className="h-5 w-5 mr-2 animate-spin" />
-                Generating Quiz...
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-5 w-5 mr-2" />
-                Generate {numQuestions} Questions
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </>
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+            {[5, 10, 15, 20, 25].map((count) => (
+              <option key={count} value={count}>
+                {count}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {selectedNote.exampleQuestions && (
+          <Collapsible 
+            open={isExamplesOpen} 
+            onOpenChange={setIsExamplesOpen}
+            className="border rounded-lg p-2 bg-muted/20"
+          >
+            <CollapsibleTrigger asChild>
+              <div className="flex items-center justify-between cursor-pointer p-2 hover:bg-muted/30 rounded transition-colors">
+                <div className="flex items-center">
+                  <FileInput className="h-5 w-5 mr-2 text-primary" />
+                  <span className="text-sm font-medium">Example Questions</span>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {isExamplesOpen ? "Hide" : "Show"}
+                </span>
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2">
+              <div className="bg-muted/20 p-3 rounded text-sm max-h-40 overflow-y-auto">
+                <pre className="whitespace-pre-wrap">{selectedNote.exampleQuestions}</pre>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                These example questions will be used to guide the AI in generating similar questions.
+              </p>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+
+        {loading && (
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span>Generating quiz</span>
+              <span>{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+            <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
+              <Loader className="h-4 w-4 animate-spin" />
+              <span>
+                {selectedNote.exampleQuestions 
+                  ? "Analyzing content and examples to create questions..."
+                  : "Analyzing content and creating questions..."}
+              </span>
+            </div>
+          </div>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Button 
+          onClick={generateQuiz} 
+          disabled={loading}
+          className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300"
+        >
+          {loading ? (
+            <Loader className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <BookOpen className="h-4 w-4 mr-2" />
+          )}
+          Generate Quiz {selectedNote.exampleQuestions ? "with Examples" : ""}
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
