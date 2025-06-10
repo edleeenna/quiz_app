@@ -1,40 +1,39 @@
-import { BookOpen, FileText, ArrowRight, Brain, CheckCircle, Sparkles, Zap, Target } from 'lucide-react';
+import { BookOpen, FileText, ArrowRight, Brain, CheckCircle, Sparkles, Zap, Target, Star, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 
 const Home = () => {
   return (
-    <div className="min-h-screen gradient-bg">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
       <Navbar />
       
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
         <div className="container px-4 py-20 md:py-32 mx-auto text-center relative">
           {/* Floating Elements */}
-          <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl floating-animation" />
-          <div className="absolute top-40 right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-xl floating-animation" style={{ animationDelay: '2s' }} />
-          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl floating-animation" style={{ animationDelay: '4s' }} />
+          <div className="absolute top-20 left-10 w-20 h-20 bg-violet-500/20 rounded-full blur-xl floating-element" />
+          <div className="absolute top-40 right-20 w-32 h-32 bg-indigo-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-purple-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '4s' }} />
           
-          <div className="relative z-10 max-w-4xl mx-auto">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400 text-sm font-medium mb-8 animate-fade-in">
+          <div className="relative z-10 max-w-5xl mx-auto">
+            <div className="inline-flex items-center px-6 py-3 bg-white/80 dark:bg-black/20 backdrop-blur-xl rounded-full text-violet-600 dark:text-violet-400 text-sm font-semibold mb-8 animate-fade-in border border-violet-200/50 shadow-lg">
               <Sparkles className="h-4 w-4 mr-2" />
-              AI-Powered Learning Revolution
+              Powered by Advanced AI Technology
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 animate-slide-up">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-up leading-tight">
               Transform Your
-              <span className="gradient-text block">Study Notes</span>
-              Into Smart Quizzes
+              <span className="gradient-text block mt-2">Study Experience</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Harness the power of AI to convert your study materials into personalized, interactive quizzes that adapt to your learning style.
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-12 animate-fade-in leading-relaxed" style={{ animationDelay: '0.2s' }}>
+              Harness the power of AI to convert your study materials into personalized, interactive quizzes that adapt to your learning style and accelerate your progress.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button asChild size="lg" className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <Button asChild size="lg" className="group btn-gradient px-8 py-4 text-lg rounded-2xl shadow-2xl hover:shadow-violet-500/25 transform hover:scale-105 transition-all duration-300">
                 <Link to="/quiz-notes">
                   <Zap className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform" />
                   Start Learning Now
@@ -42,64 +41,66 @@ const Home = () => {
                 </Link>
               </Button>
               
-              <Button variant="outline" size="lg" className="group border-2 hover:bg-muted/50 transition-all duration-300">
+              <Button variant="outline" size="lg" className="group border-2 border-violet-200 hover:border-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 px-8 py-4 text-lg rounded-2xl">
                 <BookOpen className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
                 View Demo
               </Button>
             </div>
             
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold gradient-text">10K+</div>
-                <div className="text-sm text-muted-foreground">Questions Generated</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold gradient-text">95%</div>
-                <div className="text-sm text-muted-foreground">Accuracy Rate</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold gradient-text">24/7</div>
-                <div className="text-sm text-muted-foreground">AI Availability</div>
-              </div>
+            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              {[
+                { icon: Users, value: "10K+", label: "Active Learners" },
+                { icon: TrendingUp, value: "95%", label: "Success Rate" },
+                { icon: Star, value: "4.9/5", label: "User Rating" }
+              ].map((stat, index) => (
+                <div key={index} className="space-y-3 p-6 rounded-2xl bg-white/50 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-lg">
+                  <stat.icon className="h-8 w-8 mx-auto text-violet-600" />
+                  <div className="text-3xl font-bold gradient-text">{stat.value}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 relative">
+      <section className="py-32 relative bg-white/50 dark:bg-black/20">
         <div className="container px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-8">
               How It <span className="gradient-text">Works</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Three simple steps to transform your learning experience
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              Three simple steps to revolutionize your learning experience with AI-powered personalization
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
             {[
               {
                 icon: FileText,
-                title: "Upload Your Notes",
-                description: "Import study materials in various formats including text, DOCX, and PDF files, or enter notes manually with optional example questions.",
+                title: "Upload Your Content",
+                description: "Import study materials in various formats including text, DOCX, and PDF files, or create notes manually with optional example questions to guide the AI.",
                 color: "from-blue-500 to-cyan-500",
-                delay: "0s"
+                delay: "0s",
+                step: "01"
               },
               {
                 icon: Brain,
-                title: "AI Processing",
-                description: "Our advanced AI analyzes your content and creates relevant, challenging multiple-choice questions tailored to your specific material.",
-                color: "from-purple-500 to-pink-500",
-                delay: "0.2s"
+                title: "AI Analysis",
+                description: "Our advanced AI analyzes your content using natural language processing to understand context and create relevant, challenging questions tailored to your material.",
+                color: "from-violet-500 to-purple-500",
+                delay: "0.2s",
+                step: "02"
               },
               {
                 icon: Target,
-                title: "Smart Quizzes",
-                description: "Take interactive quizzes, track your progress, and identify areas for improvement with detailed analytics and insights.",
+                title: "Smart Assessment",
+                description: "Take interactive quizzes with instant feedback, track your progress with detailed analytics, and identify areas for improvement with personalized insights.",
                 color: "from-indigo-500 to-blue-500",
-                delay: "0.4s"
+                delay: "0.4s",
+                step: "03"
               }
             ].map((feature, index) => (
               <div
@@ -107,10 +108,12 @@ const Home = () => {
                 className="group relative animate-fade-in"
                 style={{ animationDelay: feature.delay }}
               >
-                <div className="glass-card p-8 rounded-2xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-500" style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }} />
+                <div className="relative p-8 rounded-3xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 overflow-hidden">
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-slate-100 dark:text-slate-800 opacity-50">
+                    {feature.step}
+                  </div>
                   
-                  <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.color} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.color} mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <feature.icon className="h-8 w-8 text-white" />
                   </div>
                   
@@ -118,11 +121,11 @@ const Home = () => {
                     {feature.title}
                   </h3>
                   
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                     {feature.description}
                   </p>
                   
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundImage: `linear-gradient(to right, ${feature.color.split(' ')[1]}, ${feature.color.split(' ')[3]})` }} />
+                  <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                 </div>
               </div>
             ))}
@@ -131,46 +134,48 @@ const Home = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 bg-muted/30">
+      <section className="py-32 bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-900/20 dark:to-indigo-900/20">
         <div className="container px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Why Choose <span className="gradient-text">QuizNotes</span>?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-16">
-              Experience the future of personalized learning
-            </p>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-6xl font-bold mb-8">
+                Why Choose <span className="gradient-text">QuizNotes</span>?
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                Experience the future of personalized learning with cutting-edge AI technology
+              </p>
+            </div>
             
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-12">
               {[
                 {
                   icon: Zap,
-                  title: "Lightning Fast",
-                  description: "Generate comprehensive quizzes in seconds, not hours"
+                  title: "Lightning Fast Generation",
+                  description: "Create comprehensive quizzes in seconds, not hours, with our optimized AI algorithms"
                 },
                 {
                   icon: Brain,
-                  title: "AI-Powered",
-                  description: "Advanced algorithms ensure relevant and challenging questions"
+                  title: "Advanced AI Intelligence",
+                  description: "State-of-the-art natural language processing ensures relevant and challenging questions"
                 },
                 {
                   icon: Target,
-                  title: "Personalized",
-                  description: "Adaptive learning that adjusts to your knowledge level"
+                  title: "Personalized Learning",
+                  description: "Adaptive algorithms that adjust to your knowledge level and learning preferences"
                 },
                 {
                   icon: CheckCircle,
-                  title: "Progress Tracking",
-                  description: "Detailed analytics to monitor your learning journey"
+                  title: "Comprehensive Analytics",
+                  description: "Detailed progress tracking and insights to optimize your learning journey"
                 }
               ].map((benefit, index) => (
-                <div key={index} className="flex items-start space-x-4 text-left animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="flex-shrink-0 p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl">
+                <div key={index} className="flex items-start space-x-6 p-6 rounded-2xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="flex-shrink-0 p-3 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl shadow-lg">
                     <benefit.icon className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-                    <p className="text-muted-foreground">{benefit.description}</p>
+                    <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{benefit.description}</p>
                   </div>
                 </div>
               ))}
@@ -180,22 +185,23 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10" />
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 via-purple-600/10 to-indigo-600/10" />
+        <div className="absolute inset-0 bg-dot-pattern opacity-20" />
         <div className="container px-4 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="glass-card p-12 rounded-3xl">
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="p-12 rounded-3xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <h2 className="text-4xl md:text-6xl font-bold mb-8">
                 Ready to <span className="gradient-text">Transform</span> Your Learning?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join thousands of students who are already using AI-powered quizzes to enhance their study experience and achieve better results.
+              <p className="text-xl text-slate-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                Join thousands of students who are already using AI-powered quizzes to enhance their study experience, improve retention, and achieve better academic results.
               </p>
-              <Button asChild size="lg" className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+              <Button asChild size="lg" className="btn-gradient px-12 py-6 text-xl rounded-2xl shadow-2xl hover:shadow-violet-500/25 transform hover:scale-105 transition-all duration-300 group">
                 <Link to="/quiz-notes">
-                  <Sparkles className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform" />
+                  <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform" />
                   Start Your Journey
-                  <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-6 w-6 ml-3 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </div>
@@ -204,10 +210,10 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-border/40 bg-background/50 backdrop-blur">
+      <footer className="py-12 border-t border-border/40 bg-white/50 dark:bg-black/20 backdrop-blur-xl">
         <div className="container px-4 text-center">
-          <p className="text-muted-foreground">
-            QuizNotes © {new Date().getFullYear()} - Empowering learners with AI-driven education
+          <p className="text-slate-600 dark:text-slate-400 font-medium">
+            QuizNotes © {new Date().getFullYear()} - Empowering learners with AI-driven education technology
           </p>
         </div>
       </footer>

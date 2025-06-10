@@ -88,7 +88,7 @@ export default {
 				'fade-in': {
 					'0%': { 
 						opacity: '0',
-						transform: 'translateY(20px)'
+						transform: 'translateY(30px)'
 					},
 					'100%': { 
 						opacity: '1',
@@ -98,7 +98,7 @@ export default {
 				'slide-up': {
 					'0%': { 
 						opacity: '0',
-						transform: 'translateY(30px)'
+						transform: 'translateY(40px)'
 					},
 					'100%': { 
 						opacity: '1',
@@ -108,7 +108,7 @@ export default {
 				'scale-in': {
 					'0%': { 
 						opacity: '0',
-						transform: 'scale(0.95)'
+						transform: 'scale(0.9)'
 					},
 					'100%': { 
 						opacity: '1',
@@ -123,33 +123,35 @@ export default {
 						transform: 'translateY(-20px)'
 					},
 				},
-				'bounce-gentle': {
+				'bounce-soft': {
 					'0%, 100%': {
 						transform: 'translateY(0)'
 					},
 					'50%': {
-						transform: 'translateY(-10px)'
+						transform: 'translateY(-8px)'
 					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.6s ease-out forwards',
-				'slide-up': 'slide-up 0.6s ease-out forwards',
-				'scale-in': 'scale-in 0.4s ease-out forwards',
+				'fade-in': 'fade-in 0.8s ease-out forwards',
+				'slide-up': 'slide-up 0.8s ease-out forwards',
+				'scale-in': 'scale-in 0.6s ease-out forwards',
 				'float': 'float 6s ease-in-out infinite',
-				'bounce-gentle': 'bounce-gentle 2s ease-in-out infinite'
+				'bounce-soft': 'bounce-soft 2s ease-in-out infinite'
 			},
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
-				display: ['Lexend', 'sans-serif'],
+				display: ['Space Grotesk', 'sans-serif'],
 			},
 			backgroundImage: {
-				'grid-pattern': 'linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px)',
+				'grid-pattern': 'linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)',
+				'dot-pattern': 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 1px, transparent 1px)',
 			},
 			backgroundSize: {
-				'grid': '24px 24px',
+				'grid': '50px 50px',
+				'dot': '20px 20px',
 			}
 		}
 	},
