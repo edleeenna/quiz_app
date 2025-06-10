@@ -43,18 +43,21 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
               ].map((tab) => (
                 <Button
                   key={tab.id}
-                  variant={activeTab === tab.id ? "default" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   onClick={() => setActiveTab(tab.id as any)}
                   className={cn(
-                    "flex items-center space-x-2 transition-all duration-200",
+                    "flex items-center space-x-2 transition-all duration-200 relative",
                     activeTab === tab.id
-                      ? "bg-background shadow-sm"
-                      : "hover:bg-background/50"
+                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:from-blue-700 hover:to-purple-700"
+                      : "hover:bg-background/50 text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <tab.icon className="h-4 w-4" />
                   <span>{tab.label}</span>
+                  {activeTab === tab.id && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-md blur-sm" />
+                  )}
                 </Button>
               ))}
             </nav>
@@ -94,8 +97,13 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
                 ].map((tab) => (
                   <Button
                     key={tab.id}
-                    variant={activeTab === tab.id ? "default" : "ghost"}
-                    className="w-full justify-start"
+                    variant="ghost"
+                    className={cn(
+                      "w-full justify-start transition-all duration-200",
+                      activeTab === tab.id
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
+                        : "hover:bg-muted/50"
+                    )}
                     onClick={() => {
                       setActiveTab(tab.id as any);
                       setMobileMenuOpen(false);
