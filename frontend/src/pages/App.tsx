@@ -57,68 +57,67 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <main className="flex-1 container py-8 md:py-12">
-        <div className="max-w-6xl mx-auto">
-          {activeTab === "notes" && (
-            <div className="space-y-12 animate-fade-in">
-              <div className="relative">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-                <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-                <div className="absolute -top-6 left-[55%] -translate-x-1/2 w-24 h-24 bg-accent/10 rounded-full blur-3xl" />
-                <NotesUploader addNote={addNote} />
-              </div>
-              <NotesList 
-                notes={notes}
-                deleteNote={deleteNote}
-                selectNoteForQuiz={selectNoteForQuiz}
+      <main className="container py-8 md:py-12">
+        {activeTab === "notes" && (
+          <div className="space-y-12">
+            <NotesUploader addNote={addNote} />
+            <NotesList 
+              notes={notes}
+              deleteNote={deleteNote}
+              selectNoteForQuiz={selectNoteForQuiz}
+            />
+          </div>
+        )}
+        
+        {activeTab === "quiz" && (
+          <div className="space-y-8">
+            {!quizActive ? (
+              <QuizGenerator 
+                selectedNote={selectedNote}
+                onQuizGenerated={handleQuizGenerated}
               />
-            </div>
-          )}
-          
-          {activeTab === "quiz" && (
-            <div className="max-w-2xl mx-auto animate-fade-in">
-              <div className="relative">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-                <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-                {!quizActive ? (
-                  <QuizGenerator 
-                    selectedNote={selectedNote}
-                    onQuizGenerated={handleQuizGenerated}
-                  />
-                ) : (
-                  <QuizRunner 
-                    questions={quizQuestions}
-                    restartQuiz={restartQuiz}
-                    quizId={selectedQuiz?.id}
-                  />
-                )}
-              </div>
-            </div>
-          )}
+            ) : (
+              <QuizRunner 
+                questions={quizQuestions}
+                restartQuiz={restartQuiz}
+                quizId={selectedQuiz?.id}
+              />
+            )}
+          </div>
+        )}
 
-          {activeTab === "past-quizzes" && (
-            <div className="max-w-6xl mx-auto animate-fade-in">
-              <div className="relative">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-                <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-                <QuizList 
-                  onSelectQuiz={handleSelectSavedQuiz} 
-                  setActiveTab={setActiveTab}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+        {activeTab === "past-quizzes" && (
+          <QuizList 
+            onSelectQuiz={handleSelectSavedQuiz} 
+            setActiveTab={setActiveTab}
+          />
+        )}
       </main>
       
-      <footer className="py-6 text-center text-sm text-muted-foreground border-t bg-muted/10 backdrop-blur-sm">
-        <div className="container">
-          <p className="font-medium">
-            QuizNotes © {new Date().getFullYear()} - Transform your notes into quizzes
-          </p>
+      <footer className="border-t border-slate-200 bg-white/50 backdrop-blur-sm">
+        <div className="container py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">Q</span>
+              </div>
+              <div>
+                <p className="font-semibold text-slate-900">QuizNotes</p>
+                <p className="text-sm text-slate-500">AI-Powered Learning Platform</p>
+              </div>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="text-slate-600">
+                © {new Date().getFullYear()} QuizNotes. Transform your notes into quizzes.
+              </p>
+              <p className="text-sm text-slate-500 mt-1">
+                Powered by advanced AI technology
+              </p>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
