@@ -383,8 +383,8 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     id="example-questions"
                     placeholder={`Add example questions to guide AI generation:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria (correct)\nc) Ribosome\nd) Golgi apparatus`}
                     className="min-h-[200px] border-slate-200 focus:border-blue-300 focus:ring-blue-200 resize-none"
-                    value={uploadedFile ? uploadedExampleQuestions : exampleQuestions}
-                    onChange={(e) => uploadedFile ? setUploadedExampleQuestions(e.target.value) : setExampleQuestions(e.target.value)}
+                    value={exampleQuestions}
+                    onChange={(e) => setExampleQuestions(e.target.value)}
                     disabled={isUploading}
                   />
                   <p className="text-xs text-slate-500">
@@ -395,52 +395,81 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
             </Tabs>
           </CardContent>
           
-          {!uploadedFile && (
-            <CardFooter className="relative z-10">
-              <Button 
-                onClick={handleManualNoteSubmit} 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                disabled={isUploading || !noteContent.trim() || !noteName.trim()}
-              >
-                {isUploading ? (
-                  <>
-                    <Loader className="h-4 w-4 mr-2 animate-spin" />
-                    Creating Note...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Note
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          )}
+          <CardFooter className="relative z-10">
+            <Button 
+              onClick={handleManualNoteSubmit} 
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              disabled={isUploading || !noteContent.trim() || !noteName.trim()}
+            >
+              {isUploading ? (
+                <>
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Creating Note...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Note
+                </>
+              )}
+            </Button>
+          </CardFooter>
         </Card>
       </div>
 
-      {/* Additional Example Questions for Uploaded Files */}
-      {uploadedFile && (
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileInput className="h-5 w-5 text-blue-600" />
-              Add Example Questions (Optional)
-            </CardTitle>
-            <CardDescription>
-              Help the AI generate better questions by providing examples for your uploaded file: {uploadedFile.name}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              placeholder={`Add example questions to guide AI generation:\n\nQ: What is the main topic of this content?\na) Option A\nb) Option B (correct)\nc) Option C\nd) Option D`}
-              className="min-h-[150px] border-slate-200 focus:border-blue-300 focus:ring-blue-200 resize-none"
-              value={uploadedExampleQuestions}
-              onChange={(e) => setUploadedExampleQuestions(e.target.value)}
-              disabled={isUploading}
-            />
-          </CardContent>
-        </Card>
+      {/* File Content Preview and Example Questions for Uploaded Files */}
+      {uploadedFile && uploadedContent && (
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* File Content Preview */}
+          <Card className="border border-slate-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-blue-600" />
+                File Content Preview: {uploadedFile.name}
+              </CardTitle>
+              <CardDescription>
+                Review the extracted content from your uploaded file
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-slate-50 rounded-lg p-4 max-h-64 overflow-y-auto">
+                <pre className="text-sm text-slate-700 whitespace-pre-wrap">
+                  {uploadedContent.length > 1000 
+                    ? `${uploadedContent.substring(0, 1000)}...\n\n[Content truncated - ${uploadedContent.length} total characters]`
+                    : uploadedContent}
+                </pre>
+              </div>
+              <div className="mt-3 text-sm text-slate-500">
+                {uploadedContent.length} characters extracted
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Example Questions for Uploaded File */}
+          <Card className="border border-slate-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-purple-600" />
+                Add Example Questions (Optional)
+              </CardTitle>
+              <CardDescription>
+                Help the AI generate better questions by providing examples for your uploaded content
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                placeholder={`Add example questions to guide AI generation:\n\nQ: What is the main topic of this content?\na) Option A\nb) Option B (correct)\nc) Option C\nd) Option D`}
+                className="min-h-[150px] border-slate-200 focus:border-blue-300 focus:ring-blue-200 resize-none"
+                value={uploadedExampleQuestions}
+                onChange={(e) => setUploadedExampleQuestions(e.target.value)}
+                disabled={isUploading}
+              />
+              <p className="text-xs text-slate-500 mt-2">
+                These examples will help the AI understand your preferred question format and style
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );
