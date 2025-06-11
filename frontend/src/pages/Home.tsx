@@ -1,104 +1,159 @@
-import { BookOpen, FileText, ArrowRight, Brain, CheckCircle } from 'lucide-react';
+import { BookOpen, FileText, ArrowRight, Brain, CheckCircle, Sparkles, Zap, Target, Star, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/50 to-muted">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
       <Navbar />
       
       {/* Hero Section */}
-      <div className="container px-4 py-32 mx-auto text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-        <div className="relative">
-          <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -top-6 left-[45%] -translate-x-1/2 w-24 h-24 bg-secondary/10 rounded-full blur-3xl" />
-          <div className="absolute -top-6 left-[55%] -translate-x-1/2 w-24 h-24 bg-accent/10 rounded-full blur-3xl" />
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+        <div className="container px-4 py-20 md:py-32 mx-auto text-center relative">
+          {/* Floating Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-violet-500/20 rounded-full blur-xl floating-element" />
+          <div className="absolute top-40 right-20 w-32 h-32 bg-indigo-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-purple-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '4s' }} />
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-fade-in relative">
-            Transform Your Study Notes Into Quizzes
-          </h1>
+          <div className="relative z-10 max-w-5xl mx-auto">
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-up leading-tight">
+              Transform Your
+              <span className="gradient-text block mt-2">Study Experience</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-12 animate-fade-in leading-relaxed" style={{ animationDelay: '0.2s' }}>
+              Harness the power of AI to convert your study materials into personalised, interactive quizzes.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <Button asChild size="lg" className="group btn-gradient px-8 py-4 text-lg rounded-2xl shadow-2xl hover:shadow-violet-500/25 transform hover:scale-105 transition-all duration-300">
+                <Link to="/quiz-notes">
+                  <Zap className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform" />
+                  Start Learning Now
+                  <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+            
+            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              {[
+                { icon: Users, value: "1", label: "Active Learners" },
+                { icon: TrendingUp, value: "100%", label: "Success Rate" },
+                { icon: Star, value: "5/5", label: "User Rating" }
+              ].map((stat, index) => (
+                <div key={index} className="space-y-3 p-6 rounded-2xl bg-white/50 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-lg">
+                  <stat.icon className="h-8 w-8 mx-auto text-violet-600" />
+                  <div className="text-3xl font-bold gradient-text">{stat.value}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <p className="mt-8 text-xl text-muted-foreground max-w-2xl mx-auto">
-          Harness the power of Gen AI to convert your study materials into personalised quizzes.
-        </p>
-        <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group relative overflow-hidden">
-            <Link to="/quiz-notes" className="relative z-10">
-              <span className="relative z-10 flex items-center">
-                Start Learning
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 blur-xl group-hover:opacity-75 transition-opacity" />
-            </Link>
-          </Button>
-        </div>
-      </div>
+      </section>
 
       {/* Features Section */}
-      <div className="container px-4 py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          How It Works
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
-            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <FileText className="h-7 w-7 text-primary" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Upload Notes</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              Import your study materials in various formats including text, DOCX and PDF files or enter your notes manually. Optionally add example questions
-            </p>
-          </div>
-
-          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
-            <div className="h-14 w-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Brain className="h-7 w-7 text-secondary" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">AI Processing</h3>
-            <p className="text-muted-foreground leading-relaxed">
-            Our AI analyzes your notes and (hopefully) creates relevant multiple-choice questions tailored to your content.
-            </p>
-          </div>
-
-          <div className="group p-8 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:-translate-y-1">
-            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <CheckCircle className="h-7 w-7 text-accent" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Take Quizzes</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              Test your knowledge with interactive quizzes and track your progress as you learn and improve.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="container px-4 py-24">
-        <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 p-12 overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-          <div className="relative text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Transform Your Learning?
+      <section className="py-32 relative bg-white/50 dark:bg-black/20">
+        <div className="container px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-8">
+              How It <span className="gradient-text">Works</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join a singular student (that's me) who is already using AI-powered quizzes to enhance their study experience.
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              Three simple steps to revolutionise your learning experience with AI-powered personalisation
             </p>
-            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 group">
-              <Link to="/quiz-notes">
-                Get Started Now
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+            {[
+              {
+                icon: FileText,
+                title: "Upload Your Content",
+                description: "Import study materials in various formats including text & DOCX or create notes manually with optional example questions to guide the AI.",
+                color: "from-blue-500 to-cyan-500",
+                delay: "0s",
+                step: "01"
+              },
+              {
+                icon: Brain,
+                title: "AI Analysis",
+                description: "Our AI analyses your content to understand context and create relevant, challenging questions tailored to your material.",
+                color: "from-violet-500 to-purple-500",
+                delay: "0.2s",
+                step: "02"
+              },
+              {
+                icon: Target,
+                title: "Smart Assessment",
+                description: "Take interactive quizzes with instant feedback, track your progress, and identify areas for improvement.",
+                color: "from-indigo-500 to-blue-500",
+                delay: "0.4s",
+                step: "03"
+              }
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="group relative animate-fade-in"
+                style={{ animationDelay: feature.delay }}
+              >
+                <div className="relative p-8 rounded-3xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 overflow-hidden">
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-slate-100 dark:text-slate-800 opacity-50">
+                    {feature.step}
+                  </div>
+                  
+                  <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.color} mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <feature.icon className="h-8 w-8 text-white" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold mb-4 group-hover:gradient-text transition-all duration-300">
+                    {feature.title}
+                  </h3>
+                  
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {feature.description}
+                  </p>
+                  
+                  <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+      {/* CTA Section */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 via-purple-600/10 to-indigo-600/10" />
+        <div className="absolute inset-0 bg-dot-pattern opacity-20" />
+        <div className="container px-4 relative">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="p-12 rounded-3xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <h2 className="text-4xl md:text-6xl font-bold mb-8">
+                Ready to <span className="gradient-text">Transform</span> Your Learning?
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                Join one singular student who is already using AI-powered quizzes to enhance their study experience, improve retention, and achieve better academic results.
+              </p>
+              <Button asChild size="lg" className="btn-gradient px-12 py-6 text-xl rounded-2xl shadow-2xl hover:shadow-violet-500/25 transform hover:scale-105 transition-all duration-300 group">
+                <Link to="/quiz-notes">
+                  <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform" />
+                  Start Your Journey
+                  <ArrowRight className="h-6 w-6 ml-3 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="py-4 text-center text-sm text-muted-foreground border-t">
-        <div className="container">
-          QuizNotes © {new Date().getFullYear()} - Turn your notes into quizzes
+      <footer className="py-12 border-t border-border/40 bg-white/50 dark:bg-black/20 backdrop-blur-xl">
+        <div className="container px-4 text-center">
+          <p className="text-slate-600 dark:text-slate-400 font-medium">
+            QuizNotes © {new Date().getFullYear()} - Empowering learners with AI-driven education technology
+          </p>
         </div>
       </footer>
     </div>
