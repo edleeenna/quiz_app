@@ -18,10 +18,7 @@ const Home = () => {
           <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-purple-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '4s' }} />
           
           <div className="relative z-10 max-w-5xl mx-auto">
-            <div className="inline-flex items-center px-6 py-3 bg-white/80 dark:bg-black/20 backdrop-blur-xl rounded-full text-violet-600 dark:text-violet-400 text-sm font-semibold mb-8 animate-fade-in border border-violet-200/50 shadow-lg">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Powered by Advanced AI Technology
-            </div>
+           
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-up leading-tight">
               Transform Your
@@ -29,7 +26,7 @@ const Home = () => {
             </h1>
             
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-12 animate-fade-in leading-relaxed" style={{ animationDelay: '0.2s' }}>
-              Harness the power of AI to convert your study materials into personalized, interactive quizzes that adapt to your learning style and accelerate your progress.
+              Harness the power of AI to convert your study materials into personalised, interactive quizzes that adapt to your learning style and accelerate your progress.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -41,10 +38,7 @@ const Home = () => {
                 </Link>
               </Button>
               
-              <Button variant="outline" size="lg" className="group border-2 border-violet-200 hover:border-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 px-8 py-4 text-lg rounded-2xl">
-                <BookOpen className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                View Demo
-              </Button>
+            
             </div>
             
             <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
@@ -89,7 +83,7 @@ const Home = () => {
               {
                 icon: Brain,
                 title: "AI Analysis",
-                description: "Our advanced AI analyzes your content using natural language processing to understand context and create relevant, challenging questions tailored to your material.",
+                description: "Our advanced AI analyses your content using natural language processing to understand context and create relevant, challenging questions tailored to your material.",
                 color: "from-violet-500 to-purple-500",
                 delay: "0.2s",
                 step: "02"
@@ -97,7 +91,7 @@ const Home = () => {
               {
                 icon: Target,
                 title: "Smart Assessment",
-                description: "Take interactive quizzes with instant feedback, track your progress with detailed analytics, and identify areas for improvement with personalized insights.",
+                description: "Take interactive quizzes with instant feedback, track your progress with detailed analytics, and identify areas for improvement with personalised insights.",
                 color: "from-indigo-500 to-blue-500",
                 delay: "0.4s",
                 step: "03"

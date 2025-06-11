@@ -47,7 +47,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
                   key={item.id}
                   variant="ghost"
                   size="sm"
-                  onClick={() => setActiveTab(item.id as any)}
+                  onClick={() => setActiveTab(item.id as "notes" | "quiz" | "past-quizzes")}
                   className={cn(
                     "flex items-center space-x-2 transition-all duration-300 relative px-4 py-2 rounded-xl",
                     activeTab === item.id
@@ -103,7 +103,7 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
                         : "hover:bg-muted/50"
                     )}
                     onClick={() => {
-                      setActiveTab(item.id as any);
+                      setActiveTab(item.id as "notes" | "quiz" | "past-quizzes");
                       setMobileMenuOpen(false);
                     }}
                   >
