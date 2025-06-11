@@ -132,7 +132,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
           Generate Your <span className="gradient-text">Smart Quiz</span>
         </h2>
         <p className="text-lg text-muted-foreground">
-          Our AI will analyze your notes and create personalized questions to test your knowledge.
+          Our AI will analyze your notes and create personalised questions to test your knowledge.
         </p>
       </div>
 
@@ -252,7 +252,7 @@ const QuizGenerator = ({ selectedNote, onQuizGenerated }: QuizGeneratorProps) =>
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">
                   {selectedNote.exampleQuestions 
-                    ? "Analyzing content and examples to create personalized questions..."
+                    ? "Analyzing content and examples to create personalised questions..."
                     : "Analyzing content and creating intelligent questions..."}
                 </p>
               </div>

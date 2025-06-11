@@ -224,7 +224,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
           Transform Your <span className="gradient-text">Notes</span>
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Upload your study materials or create notes manually. Our AI will analyze your content and generate personalized quizzes.
+          Upload your study materials or create notes manually. Our AI will analyze your content and generate personalised quizzes.
         </p>
       </div>
 

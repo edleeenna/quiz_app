@@ -18,10 +18,6 @@ const Home = () => {
           <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-purple-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '4s' }} />
           
           <div className="relative z-10 max-w-5xl mx-auto">
-            <div className="inline-flex items-center px-6 py-3 bg-white/80 dark:bg-black/20 backdrop-blur-xl rounded-full text-violet-600 dark:text-violet-400 text-sm font-semibold mb-8 animate-fade-in border border-violet-200/50 shadow-lg">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Powered by Advanced AI Technology
-            </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-up leading-tight">
               Transform Your
@@ -29,7 +25,7 @@ const Home = () => {
             </h1>
             
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto mb-12 animate-fade-in leading-relaxed" style={{ animationDelay: '0.2s' }}>
-              Harness the power of AI to convert your study materials into personalized, interactive quizzes that adapt to your learning style and accelerate your progress.
+              Harness the power of AI to convert your study materials into personalised, interactive quizzes.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -40,18 +36,13 @@ const Home = () => {
                   <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              
-              <Button variant="outline" size="lg" className="group border-2 border-violet-200 hover:border-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all duration-300 px-8 py-4 text-lg rounded-2xl">
-                <BookOpen className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                View Demo
-              </Button>
             </div>
             
             <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
               {[
-                { icon: Users, value: "10K+", label: "Active Learners" },
-                { icon: TrendingUp, value: "95%", label: "Success Rate" },
-                { icon: Star, value: "4.9/5", label: "User Rating" }
+                { icon: Users, value: "1", label: "Active Learners" },
+                { icon: TrendingUp, value: "100%", label: "Success Rate" },
+                { icon: Star, value: "5/5", label: "User Rating" }
               ].map((stat, index) => (
                 <div key={index} className="space-y-3 p-6 rounded-2xl bg-white/50 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-lg">
                   <stat.icon className="h-8 w-8 mx-auto text-violet-600" />
@@ -72,7 +63,7 @@ const Home = () => {
               How It <span className="gradient-text">Works</span>
             </h2>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Three simple steps to revolutionize your learning experience with AI-powered personalization
+              Three simple steps to revolutionise your learning experience with AI-powered personalisation
             </p>
           </div>
           
@@ -81,7 +72,7 @@ const Home = () => {
               {
                 icon: FileText,
                 title: "Upload Your Content",
-                description: "Import study materials in various formats including text, DOCX, and PDF files, or create notes manually with optional example questions to guide the AI.",
+                description: "Import study materials in various formats including text & DOCX or create notes manually with optional example questions to guide the AI.",
                 color: "from-blue-500 to-cyan-500",
                 delay: "0s",
                 step: "01"
@@ -89,7 +80,7 @@ const Home = () => {
               {
                 icon: Brain,
                 title: "AI Analysis",
-                description: "Our advanced AI analyzes your content using natural language processing to understand context and create relevant, challenging questions tailored to your material.",
+                description: "Our AI analyses your content to understand context and create relevant, challenging questions tailored to your material.",
                 color: "from-violet-500 to-purple-500",
                 delay: "0.2s",
                 step: "02"
@@ -97,7 +88,7 @@ const Home = () => {
               {
                 icon: Target,
                 title: "Smart Assessment",
-                description: "Take interactive quizzes with instant feedback, track your progress with detailed analytics, and identify areas for improvement with personalized insights.",
+                description: "Take interactive quizzes with instant feedback, track your progress, and identify areas for improvement.",
                 color: "from-indigo-500 to-blue-500",
                 delay: "0.4s",
                 step: "03"
@@ -132,58 +123,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Benefits Section */}
-      <section className="py-32 bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-900/20 dark:to-indigo-900/20">
-        <div className="container px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-6xl font-bold mb-8">
-                Why Choose <span className="gradient-text">QuizNotes</span>?
-              </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-                Experience the future of personalized learning with cutting-edge AI technology
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-12">
-              {[
-                {
-                  icon: Zap,
-                  title: "Lightning Fast Generation",
-                  description: "Create comprehensive quizzes in seconds, not hours, with our optimized AI algorithms"
-                },
-                {
-                  icon: Brain,
-                  title: "Advanced AI Intelligence",
-                  description: "State-of-the-art natural language processing ensures relevant and challenging questions"
-                },
-                {
-                  icon: Target,
-                  title: "Personalized Learning",
-                  description: "Adaptive algorithms that adjust to your knowledge level and learning preferences"
-                },
-                {
-                  icon: CheckCircle,
-                  title: "Comprehensive Analytics",
-                  description: "Detailed progress tracking and insights to optimize your learning journey"
-                }
-              ].map((benefit, index) => (
-                <div key={index} className="flex items-start space-x-6 p-6 rounded-2xl bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="flex-shrink-0 p-3 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl shadow-lg">
-                    <benefit.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{benefit.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 via-purple-600/10 to-indigo-600/10" />
@@ -195,7 +134,7 @@ const Home = () => {
                 Ready to <span className="gradient-text">Transform</span> Your Learning?
               </h2>
               <p className="text-xl text-slate-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-                Join thousands of students who are already using AI-powered quizzes to enhance their study experience, improve retention, and achieve better academic results.
+                Join one singular student who is already using AI-powered quizzes to enhance their study experience, improve retention, and achieve better academic results.
               </p>
               <Button asChild size="lg" className="btn-gradient px-12 py-6 text-xl rounded-2xl shadow-2xl hover:shadow-violet-500/25 transform hover:scale-105 transition-all duration-300 group">
                 <Link to="/quiz-notes">
