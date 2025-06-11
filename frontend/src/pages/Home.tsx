@@ -136,7 +136,7 @@ const Home = () => {
                 Why Choose <span className="gradient-text">QuizNotes</span>?
               </h2>
               <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-                Experience the future of personalized learning with cutting-edge AI technology
+                Experience the future of personalised learning with cutting-edge AI technology
               </p>
             </div>
             
@@ -154,7 +154,7 @@ const Home = () => {
                 },
                 {
                   icon: Target,
-                  title: "Personalized Learning",
+                  title: "Personalised Learning",
                   description: "Adaptive algorithms that adjust to your knowledge level and learning preferences"
                 },
                 {
