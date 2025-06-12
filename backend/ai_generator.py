@@ -19,42 +19,42 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
 
     # Step 3: Construct the prompt using RAG context
     prompt = f"""
-    You are a helpful quiz master who likes to curate interesting & relevant quiz questions that help people learn
+        You are a helpful quiz master who writes high-quality, relevant, and realistic multiple-choice quiz questions to help people learn.
 
-    - Generate exactly {notes_file.num_questions} multiple-choice quiz questions based on the context provided below.
-    {context}
+        Context:
+        {context}
 
-    Example Questions:
-    {notes_file.example_questions or 'None'}
+        Instructions:
+        - Generate exactly {notes_file.num_questions} multiple-choice quiz questions based on the context above.
+        - The example questions below may contain scenarios. If they do, then **all generated questions MUST follow the same format**: start with a short real-world scenario, then ask the question.
+        - If the example is in scenario format (e.g., "Gurvinder has been asked to assist a company that..."), then every generated question must use a realistic scenario of 1–3 sentences followed by a question about it.
+        - Use the **same tone, style, and structure** as the example questions.
+        - Ensure the scenario directly relates to content in the context above.
 
-    Instructions:
-    - Return exactly {notes_file.num_questions} questions.
-    - STOP immediately after the last question.
-    - Each question must have 4 answer options labeled a), b), c), and d).
-    - Randomize the order of the options.
-    - The correct answer MUST be **exactly one of the 4 options**.
-    - The correct answer MUST match one of the options **verbatim**.
-    - All options should be plausible, but only one should be correct.
-    - Do NOT include questions where the correct answer is not present in the options.
-    - Ensure clarity, accuracy, and relevance to the notes.
-    - Use the example questions to guide style and format. 
-    - Do NOT include any explanation, thinking, or reasoning before the questions.
-    - Only output the final formatted questions and answers in the specified structure.
-    - The answer line must include both the correct option letter and the full answer text (e.g., "Answer: b) Loss of data").
+        Example Questions:
+        {notes_file.example_questions or 'None'}
 
+        Formatting Rules:
+        - Each question must have 4 answer options labeled a), b), c), and d).
+        - Randomize the order of options.
+        - The correct answer MUST be **exactly one of the 4 options**.
+        - The correct answer MUST match one of the options **verbatim**.
+        - All options should be plausible, but only one should be correct.
+        - Do NOT include questions where the correct answer is not in the options.
+        - Do NOT include explanations, thoughts, or reasoning.
+        - Output only the formatted questions and answers.
 
+        Output Format:
+        Q: ...
+        a) ...
+        b) ...
+        c) ...
+        d) ...
+        Answer: ...
 
-    Output Format:
-    Q: ...
-    a) ...
-    b) ...
-    c) ...
-    d) ...
-    Answer: ...
+        After writing {notes_file.num_questions} questions, write EndOfQuestions.
+        """
 
-    After writing {notes_file.num_questions} questions, write EndOfQuestions.
-
-    """
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -73,6 +73,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
     response.raise_for_status()
     content = response.json()["choices"][0]["message"]["content"]
     print(content)
+    
     return parse_questions(content, notes_file.num_questions)
 
 

@@ -453,7 +453,7 @@ const NotesUploader = ({ addNote }: NotesUploaderProps) => {
                     </label>
                     <Textarea
                       id="example-questions"
-                      placeholder={`Guide the AI with example questions:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria (correct)\nc) Ribosome\nd) Golgi apparatus`}
+                      placeholder={`Guide the AI with example questions:\n\nQ: What is the powerhouse of the cell?\na) Nucleus\nb) Mitochondria\nc) Ribosome\nd) Golgi apparatus\nAnswer: Mitochondria`}
                       className="min-h-[200px] bg-background/50 border-border/50 focus:border-purple-300 resize-none"
                       value={exampleQuestions}
                       onChange={(e) => setExampleQuestions(e.target.value)}
