@@ -61,7 +61,7 @@ def generate_quiz_from_notes(notes_file: NotesFile) -> list[QuizQuestion]:
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "mistral-saba-24b",
+        "model": "qwen/qwen3-32b",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.3,
         "stop": ["EndOfQuestions"],
